@@ -41,8 +41,29 @@ $app = new Illuminate\Foundation\Application(
     // realpath() 返回规范化的绝对路径名
     // 在 Windows 上，realpath() 会将 unix 风格的路径改成 Windows 风格的。
     realpath(__DIR__.'/../')
+);</pre>
+                    </li>
+                    <li>
+                        绑定重要接口
+                        <code><a href="vendor/laravel/framework/src/Illuminate/Container/Container.php#L269">Illuminate\Container\Container.php@singleton</a></code>
+                        <pre>
+// $app->singleton(); 注册单例
+// Illuminate\Container\Container.php@singleton
+
+$app->singleton(
+    'Illuminate\Contracts\Http\Kernel',
+    'App\Http\Kernel'
 );
-                        </pre>
+
+$app->singleton(
+    'Illuminate\Contracts\Console\Kernel',
+    'App\Console\Kernel'
+);
+
+$app->singleton(
+    'Illuminate\Contracts\Debug\ExceptionHandler',
+    'App\Exceptions\Handler'
+);</pre>
                     </li>
                 </ul>
             </li>
