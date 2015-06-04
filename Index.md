@@ -1,3 +1,3 @@
 ## 源码结构索引
 
-- public
+- [public/index.php](public/index.php)
