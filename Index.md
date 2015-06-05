@@ -1,10 +1,4 @@
-<style>
-    .l2 { margin-left: 2em; }
-    .l3 { margin-left: 4em; }
-    .l4 { margin-left: 6em; }
-</style>
-
-## 源码结构索引
+## 源码阅读索引
 
 > 入口文件 /public/[index.php](public/index.php)
 
@@ -14,7 +8,7 @@
 require __DIR__.'/../bootstrap/<a href="bootstrap/autoload.php">autoload.php</a>';
 </pre>
 
-<pre class="l2">
+<pre style="margin-left: 2em;">
 # 申明常量 LARAVEL_START 记录应用程序开始时间
 define('LARAVEL_START', microtime(true));
 
@@ -35,7 +29,7 @@ if (file_exists($compiledPath))
 $app = require_once __DIR__.'/../bootstrap/<a href="bootstrap/app.php">app.php</a>';
 </pre>
 
-<pre class="l2">
+<pre style="margin-left: 2em;">
 # 实例化应用程序
 $app = new Illuminate\Foundation\Application(
     // 应用程序基础路径（根目录）
