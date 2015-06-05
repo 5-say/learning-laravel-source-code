@@ -11,11 +11,20 @@
         .l2 { margin-left: 2em; }
         .l3 { margin-left: 4em; }
         .l4 { margin-left: 6em; }
+        pre a { border-bottom: dotted 2px #9FCCFC; }
+        pre a:hover span { color: #6AB0F7; }
     </style>
+    <link rel="stylesheet" href="highlight/src/styles/obsidian.css">
+    <script src="highlight/src/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="highlight/src/jquery-2.1.1.min.js"></script>
   </head>
   <body>
     <section class="page-header" style="padding: 0;">
-      <h1 class="project-name"><a href="index.html" class="btn">Learning-laravel-source-code</a></h1>
+      <h1 class="project-name">Learning-laravel-source-code</h1>
+      <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+      <a href="index.html" class="btn">回到首页</a>
+      <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn">问题反馈</a>
     </section>
 
     <section class="main-content">
@@ -23,13 +32,13 @@
       <h2>入口文件 /public/<a href="public/index.php">index.php</a></h2>
 
 
-<pre>
-# 注册自动加载
-require __DIR__.'/../bootstrap/<a href="bootstrap/autoload.php">autoload.php</a>';
-</pre>
 
-<pre class="l2">
-# 申明常量 LARAVEL_START 记录应用程序开始时间
+
+<pre><code class="php"># 注册自动加载
+require __DIR__.'/../<a href="bootstrap/autoload.php">bootstrap/autoload.php</a>';
+</code></pre>
+
+<pre class="l2"><code class="php"># 申明常量 LARAVEL_START 记录应用程序开始时间
 define('LARAVEL_START', microtime(true));
 
 # 注册 Composer 自动加载程序
@@ -42,15 +51,13 @@ if (file_exists($compiledPath))
 {
     require $compiledPath;
 }
-</pre>
+</code></pre>
 
-<pre>
-# 获取应用程序实例
-$app = require_once __DIR__.'/../bootstrap/<a href="bootstrap/app.php">app.php</a>';
-</pre>
+<pre><code class="php"># 获取应用程序实例
+$app = require_once __DIR__.'/../<a href="bootstrap/app.php">bootstrap/app.php</a>';
+</code></pre>
 
-<pre class="l2">
-# 实例化应用程序
+<pre class="l2"><code class="php"># 实例化应用程序
 $app = new Illuminate\Foundation\Application(
     // 应用程序基础路径（根目录）
     // realpath() 返回规范化的绝对路径名
@@ -80,10 +87,9 @@ $app->singleton(
 
 # 返回应用程序实例
 return $app;
-</pre>
+</code></pre>
 
-<pre>
-# 运行应用程序
+<pre><code class="php"># 运行应用程序
 $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
 $response = $kernel->handle(
@@ -93,7 +99,9 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
-</pre>
+</code></pre>
+
+
 
 
       <footer class="site-footer" style="text-align: center;">
@@ -103,6 +111,18 @@ $kernel->terminate($request, $response);
       </footer>
 
     </section>
+
+
+    <script>
+          // 监听内容区域 a 标签点击事件
+      $('.main-content')
+        .on('click', 'a[href!=""]', function () {
+          var url = $(this).attr('href');
+          if (url.search('#') == 0) return true;
+          window.open('https://github.com/5-say/learning-laravel-source-code/blob/5.0/'+url);
+          return false;
+        });
+    </script>
 
   
   </body>
