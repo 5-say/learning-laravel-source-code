@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../highlight/src/styles/obsidian.css">
+        <script src="../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="index.html" class="btn">回到首页</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2>入口文件 /public/<a href="public/index.php">index.php</a></h2>
+
+
+
+
+<pre id="__construct"><code class="php">/**
+ * Create a new Illuminate application instance.
+ * 创建一个新的 Illuminate 应用程序实例。
+ *
+ * @param  string|null  $basePath 应用程序基础路径（根目录）
+ * @return void
+ */
+public function __construct($basePath = null)
+{
+    $this-><a href="#registerBaseBindings">registerBaseBindings</a>();
+
+    $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>();
+
+    $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>();
+
+    if ($basePath) $this-><a href="#setBasePath">setBasePath</a>($basePath);
+}
+</code></pre>
+
+<pre id="registerBaseBindings"><code class="php">/**
+ * Register the basic bindings into the container.
+ *
+ * @return void
+ */
+protected function registerBaseBindings()
+{
+    static::<a href="Container.html#setInstance">setInstance</a>($this);
+
+    $this->instance('app', $this);
+
+    $this->instance('Illuminate\Container\Container', $this);
+}
+</code></pre>
+
+<pre id="registerBaseServiceProviders"><code class="php">/**
+ * Register all of the base service providers.
+ *
+ * @return void
+ */
+protected function registerBaseServiceProviders()
+{
+    $this->register(new EventServiceProvider($this));
+
+    $this->register(new RoutingServiceProvider($this));
+}
+</code></pre>
+
+<pre id="registerCoreContainerAliases"><code class="php">/**
+ * Register the core class aliases in the container.
+ *
+ * @return void
+ */
+public function registerCoreContainerAliases()
+{
+    $aliases = array(
+        'app'                  => ['Illuminate\Foundation\Application', 'Illuminate\Contracts\Container\Container', 'Illuminate\Contracts\Foundation\Application'],
+        'artisan'              => ['Illuminate\Console\Application', 'Illuminate\Contracts\Console\Application'],
+        'auth'                 => 'Illuminate\Auth\AuthManager',
+        'auth.driver'          => ['Illuminate\Auth\Guard', 'Illuminate\Contracts\Auth\Guard'],
+        'auth.password.tokens' => 'Illuminate\Auth\Passwords\TokenRepositoryInterface',
+        'blade.compiler'       => 'Illuminate\View\Compilers\BladeCompiler',
+        'cache'                => ['Illuminate\Cache\CacheManager', 'Illuminate\Contracts\Cache\Factory'],
+        'cache.store'          => ['Illuminate\Cache\Repository', 'Illuminate\Contracts\Cache\Repository'],
+        'config'               => ['Illuminate\Config\Repository', 'Illuminate\Contracts\Config\Repository'],
+        'cookie'               => ['Illuminate\Cookie\CookieJar', 'Illuminate\Contracts\Cookie\Factory', 'Illuminate\Contracts\Cookie\QueueingFactory'],
+        'encrypter'            => ['Illuminate\Encryption\Encrypter', 'Illuminate\Contracts\Encryption\Encrypter'],
+        'db'                   => 'Illuminate\Database\DatabaseManager',
+        'events'               => ['Illuminate\Events\Dispatcher', 'Illuminate\Contracts\Events\Dispatcher'],
+        'files'                => 'Illuminate\Filesystem\Filesystem',
+        'filesystem'           => ['Illuminate\Filesystem\FilesystemManager', 'Illuminate\Contracts\Filesystem\Factory'],
+        'filesystem.disk'      => 'Illuminate\Contracts\Filesystem\Filesystem',
+        'filesystem.cloud'     => 'Illuminate\Contracts\Filesystem\Cloud',
+        'hash'                 => 'Illuminate\Contracts\Hashing\Hasher',
+        'translator'           => ['Illuminate\Translation\Translator', 'Symfony\Component\Translation\TranslatorInterface'],
+        'log'                  => ['Illuminate\Log\Writer', 'Illuminate\Contracts\Logging\Log', 'Psr\Log\LoggerInterface'],
+        'mailer'               => ['Illuminate\Mail\Mailer', 'Illuminate\Contracts\Mail\Mailer', 'Illuminate\Contracts\Mail\MailQueue'],
+        'paginator'            => 'Illuminate\Pagination\Factory',
+        'auth.password'        => ['Illuminate\Auth\Passwords\PasswordBroker', 'Illuminate\Contracts\Auth\PasswordBroker'],
+        'queue'                => ['Illuminate\Queue\QueueManager', 'Illuminate\Contracts\Queue\Factory', 'Illuminate\Contracts\Queue\Monitor'],
+        'queue.connection'     => 'Illuminate\Contracts\Queue\Queue',
+        'redirect'             => 'Illuminate\Routing\Redirector',
+        'redis'                => ['Illuminate\Redis\Database', 'Illuminate\Contracts\Redis\Database'],
+        'request'              => 'Illuminate\Http\Request',
+        'router'               => ['Illuminate\Routing\Router', 'Illuminate\Contracts\Routing\Registrar'],
+        'session'              => 'Illuminate\Session\SessionManager',
+        'session.store'        => ['Illuminate\Session\Store', 'Symfony\Component\HttpFoundation\Session\SessionInterface'],
+        'url'                  => ['Illuminate\Routing\UrlGenerator', 'Illuminate\Contracts\Routing\UrlGenerator'],
+        'validator'            => ['Illuminate\Validation\Factory', 'Illuminate\Contracts\Validation\Factory'],
+        'view'                 => ['Illuminate\View\Factory', 'Illuminate\Contracts\View\Factory'],
+    );
+
+    foreach ($aliases as $key => $aliases)
+    {
+        foreach ((array) $aliases as $alias)
+        {
+            $this->alias($key, $alias);
+        }
+    }
+}
+</code></pre>
+
+<pre id="setBasePath"><code class="php">/**
+ * Set the base path for the application.
+ *
+ * @param  string  $basePath
+ * @return $this
+ */
+public function setBasePath($basePath)
+{
+    $this->basePath = $basePath;
+
+    $this->bindPathsInContainer();
+
+    return $this;
+}
+</code></pre>
+
+<pre id=""><code class="php">
+</code></pre>
+
+<pre id=""><code class="php">
+</code></pre>
+
+<pre id=""><code class="php">
+</code></pre>
+
+<pre id=""><code class="php">
+</code></pre>
+
+<pre id=""><code class="php">
+</code></pre>
+
+
+
+
+
+            <footer class="site-footer" style="text-align: center;">
+                <span class="site-footer-owner"><a href="https://github.com/5-say/learning-laravel-source-code">Learning-laravel-source-code</a> is maintained by <a href="https://github.com/5-say">5-say</a>.</span>
+
+                <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+            </footer>
+
+        </section>
+
+
+        <script>
+            // 监听内容区域 a 标签点击事件
+            $('.main-content')
+                .on('click', 'a[href!=""]', function () {
+
+                    var url = $(this).attr('href');
+
+                    if (url.search('#') == 0) return true;
+
+                    if (url.search('.') == 0)
+                        window.open(url);
+                    else
+                        window.open('https://github.com/5-say/learning-laravel-source-code/blob/5.0/'+url);
+
+                    return false;
+                });
+        </script>
+
+    
+    </body>
+</html>
+
