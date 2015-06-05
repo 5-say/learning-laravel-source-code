@@ -260,10 +260,9 @@ class Container implements ArrayAccess, ContainerContract {
 
 	/**
 	 * Register a shared binding in the container.
-	 * 在容器中注册一个共享绑定
 	 *
-	 * @param  string  $abstract 抽象类（接口）
-	 * @param  \Closure|string|null  $concrete 具体实现
+	 * @param  string  $abstract
+	 * @param  \Closure|string|null  $concrete
 	 * @return void
 	 */
 	public function singleton($abstract, $concrete = null)
@@ -1014,14 +1013,14 @@ class Container implements ArrayAccess, ContainerContract {
 
 		if ($function->getNumberOfParameters() == 0)
 		{
-			return null;
+			return;
 		}
 
 		$expected = $function->getParameters()[0];
 
 		if ( ! $expected->getClass())
 		{
-			return null;
+			return;
 		}
 
 		return $expected->getClass()->name;

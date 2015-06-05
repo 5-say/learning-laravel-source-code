@@ -40,16 +40,17 @@ $app = new Illuminate\Foundation\Application(
 // $app->singleton(); 注册单例
 // Illuminate\Container\Container.php@singleton
 
+// http
 $app->singleton(
 	'Illuminate\Contracts\Http\Kernel',
 	'App\Http\Kernel'
 );
-
+// 控制台
 $app->singleton(
 	'Illuminate\Contracts\Console\Kernel',
 	'App\Console\Kernel'
 );
-
+// 异常处理
 $app->singleton(
 	'Illuminate\Contracts\Debug\ExceptionHandler',
 	'App\Exceptions\Handler'
