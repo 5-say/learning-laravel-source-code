@@ -43,33 +43,35 @@
  */
 public function __construct($basePath = null)
 {
-    $this-><a href="#registerBaseBindings">registerBaseBindings</a>();
+    $this-><a href="#registerBaseBindings">registerBaseBindings</a>(); // 注册基础绑定
 
-    $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>();
+    $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>(); // 注册所有的基础服务提供商
 
-    $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>();
+    $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>(); // 注册核心类别名
 
-    if ($basePath) $this-><a href="#setBasePath">setBasePath</a>($basePath);
+    if ($basePath) $this-><a href="#setBasePath">setBasePath</a>($basePath); // 设置基础路径
 }
 </code></pre>
 
 <pre id="registerBaseBindings"><code class="php">/**
  * Register the basic bindings into the container.
+ * 在容器中注册基础绑定
  *
  * @return void
  */
 protected function registerBaseBindings()
 {
-    static::<a href="Container.html#setInstance">setInstance</a>($this);
+    static::<a href="Container.html#setInstance">setInstance</a>($this); // 设置共享的容器实例
 
-    $this->instance('app', $this);
+    $this-><a href="Container.html#instance">instance</a>('app', $this);
 
-    $this->instance('Illuminate\Container\Container', $this);
+    $this-><a href="Container.html#instance">instance</a>('Illuminate\Container\Container', $this);
 }
 </code></pre>
 
 <pre id="registerBaseServiceProviders"><code class="php">/**
  * Register all of the base service providers.
+ * 注册所有的基础服务提供商
  *
  * @return void
  */
@@ -83,6 +85,7 @@ protected function registerBaseServiceProviders()
 
 <pre id="registerCoreContainerAliases"><code class="php">/**
  * Register the core class aliases in the container.
+ * 在容器中注册核心类别名
  *
  * @return void
  */
@@ -151,7 +154,26 @@ public function setBasePath($basePath)
 }
 </code></pre>
 
-<pre id=""><code class="php">
+<pre id="make"><code class="php">/**
+ * Resolve the given type from the container.
+ *
+ * (Overriding Container::make)
+ *
+ * @param  string  $abstract
+ * @param  array   $parameters
+ * @return mixed
+ */
+public function make($abstract, $parameters = array())
+{
+    $abstract = $this->getAlias($abstract);
+
+    if (isset($this->deferredServices[$abstract]))
+    {
+        $this->loadDeferredProvider($abstract);
+    }
+
+    return parent::make($abstract, $parameters);
+}
 </code></pre>
 
 <pre id=""><code class="php">
