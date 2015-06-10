@@ -23,7 +23,8 @@
         <section class="page-header" style="padding: 0;">
             <h1 class="project-name">Learning-laravel-source-code</h1>
             <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
-            <a href="index.html" class="btn">回到首页</a>
+            <a href="../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
             <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
         </section>
 
@@ -36,16 +37,34 @@
 
 <pre id="$instance"><code class="php">/**
  * The current globally available container (if any).
- * 当前全局可用的容器（如果存在）
+ * 当前全局可用的容器（如果存在）。
  *
  * @var static
  */
 protected static $instance;
 </code></pre>
 
+<pre id="$instances"><code class="php">/**
+ * The container's shared instances.
+ * 当前容器的共享实例。
+ *
+ * @var array
+ */
+protected $instances = [];
+</code></pre>
+
+<pre id="$aliases"><code class="php">/**
+ * The registered type aliases.
+ * 已注册的类型别名。
+ * 
+ * @var array
+ */
+protected $aliases = [];
+</code></pre>
+
 <pre id="setInstance"><code class="php">/**
  * Set the shared instance of the container.
- * 设置共享的容器实例
+ * 设置共享的容器实例。
  *
  * @param  \Illuminate\Contracts\Container\Container  $container 容器实例
  * @return void
@@ -58,7 +77,7 @@ public static function setInstance(ContainerContract $container)
 
 <pre id="instance"><code class="php">/**
  * Register an existing instance as shared in the container.
- * 
+ * 在容器中注册现有实例为共享实例
  * 
  * @param  string  $abstract 抽象类
  * @param  mixed   $instance 实例
@@ -69,17 +88,17 @@ public function instance($abstract, $instance)
     // First, we will extract the alias from the abstract if it is an array so we
     // 首先，如果 abstract 是一个数组，我们将从中提取别名，
     // are using the correct name when binding the type. If we get an alias it
-    // 因此我们在绑定类型时使用正确的名称。如果我们得到一个别名，
+    // 因此我们可以在绑定类型时使用正确的名称。如果我们得到一个别名，
     // will be registered with the container so we can resolve it out later.
     // 它将被注册到容器，这样我们可以在之后使用它。
     if (is_array($abstract))
     {
-        list($abstract, $alias) = $this->extractAlias($abstract);
+        <a href="../php.html#list">list</a>($abstract, $alias) = $this-><a href="#extractAlias">extractAlias</a>($abstract); // 提取别名
 
-        $this->alias($abstract, $alias);
+        $this-><a href="#alias">alias</a>($abstract, $alias);
     }
 
-    unset($this->aliases[$abstract]);
+    unset($this-><a href="#$aliases">aliases</a>[$abstract]);
 
     // We'll check to determine if this type has been bound before, and if it has
     // 我们将检查以确定该类型之前是否已经绑定，并且如果已经绑定
@@ -88,12 +107,25 @@ public function instance($abstract, $instance)
     // can be updated with consuming classes that have gotten resolved here.
     $bound = $this->bound($abstract);
 
-    $this->instances[$abstract] = $instance;
+    $this-><a href="#$instances">instances</a>[$abstract] = $instance;
 
     if ($bound)
     {
         $this->rebound($abstract);
     }
+}
+</code></pre>
+
+<pre id="extractAlias"><code class="php">/**
+ * Extract the type and alias from a given definition.
+ * 从给定的数组中提取类型和别名
+ * 
+ * @param  array  $definition
+ * @return array  array(类型, 别名)
+ */
+protected function extractAlias(array $definition)
+{
+    return [<a href="../php.html#key">key</a>($definition), <a href="../php.html#current">current</a>($definition)];
 }
 </code></pre>
 
@@ -172,10 +204,18 @@ public function make($abstract, $parameters = [])
 }
 </code></pre>
 
-<pre id=""><code class="php">
-</code></pre>
-
-<pre id=""><code class="php">
+<pre id="alias"><code class="php">/**
+ * Alias a type to a different name.
+ * 将给定的名称设置为一个类型的别名。
+ * 
+ * @param  string  $abstract 抽象类
+ * @param  string  $alias    别名
+ * @return void
+ */
+public function alias($abstract, $alias)
+{
+    $this-><a href="#$aliases">aliases</a>[$alias] = $abstract;
+}
 </code></pre>
 
 <pre id=""><code class="php">
