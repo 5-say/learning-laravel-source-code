@@ -197,7 +197,8 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function bound($abstract)
     {
-        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || $this->isAlias($abstract);
+        // 
+        return isset($this-><a href="#$bindings">bindings</a>[$abstract]) || isset($this-><a href="#$instances">instances</a>[$abstract]) || $this-><a href="#isAlias">isAlias</a>($abstract);
     }
 
     <hr id="resolved">
@@ -426,13 +427,13 @@ class Container implements ArrayAccess, ContainerContract {
         // We'll check to determine if this type has been bound before, and if it has
         // we will fire the rebound callbacks registered with the container and it
         // can be updated with consuming classes that have gotten resolved here.
-        $bound = $this->bound($abstract);
+        $bound = $this-><a href="Application.html#bound">bound</a>($abstract);
 
         $this-><a href="#$instances">instances</a>[$abstract] = $instance;
 
         if ($bound)
         {
-            $this->rebound($abstract);
+            $this-><a href="#rebound">rebound</a>($abstract);
         }
     }
 

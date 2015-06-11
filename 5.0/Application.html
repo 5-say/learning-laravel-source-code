@@ -129,6 +129,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$deferredServices">
     /**
      * The deferred services and their providers.
+     * 需要延迟加载的服务和它的提供者。
      *
      * @var array
      */
@@ -749,7 +750,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function bound($abstract)
     {
-        return isset($this->deferredServices[$abstract]) || parent::bound($abstract);
+        // 判断是否为“延迟启动的服务”，或调用父类 bound 方法，判断
+        return isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]) || parent::<a href="Container.html#bound">bound</a>($abstract);
     }
 
     <hr id="isBooted">
