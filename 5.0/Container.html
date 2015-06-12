@@ -61,6 +61,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$resolved">
     /**
      * An array of the types that have been resolved.
+     * 已解析的类型数组。
      *
      * @var array
      */
@@ -69,6 +70,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$bindings">
     /**
      * The container's bindings.
+     * 当前容器的绑定项。
      *
      * @var array
      */
@@ -95,6 +97,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$extenders">
     /**
      * The extension closures for services.
+     * 服务的扩展闭包。
      *
      * @var array
      */
@@ -103,6 +106,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$tags">
     /**
      * All of the registered tags.
+     * 所有已注册的标签。
      *
      * @var array
      */
@@ -127,6 +131,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$reboundCallbacks">
     /**
      * All of the registered rebound callbacks.
+     * 所有已注册的反弹回调。
      *
      * @var array
      */
@@ -135,6 +140,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$globalResolvingCallbacks">
     /**
      * All of the global resolving callbacks.
+     * 所有全局解析中回调。
      *
      * @var array
      */
@@ -143,6 +149,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$globalAfterResolvingCallbacks">
     /**
      * All of the global after resolving callbacks.
+     * 所有全局解析后回调。
      *
      * @var array
      */
@@ -191,19 +198,21 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="bound">
     /**
      * Determine if the given abstract type has been bound.
+     * 判断给定类型是否已被绑定。
      *
      * @param  string  $abstract
      * @return bool
      */
     public function bound($abstract)
     {
-        // 
+        // 判断是否为当前容器的“绑定项”、“共享实例”或“别名”
         return isset($this-><a href="#$bindings">bindings</a>[$abstract]) || isset($this-><a href="#$instances">instances</a>[$abstract]) || $this-><a href="#isAlias">isAlias</a>($abstract);
     }
 
     <hr id="resolved">
     /**
      * Determine if the given abstract type has been resolved.
+     * 判断给定抽象类型是否已被解析。
      *
      * @param  string  $abstract
      * @return bool
@@ -216,13 +225,14 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="isAlias">
     /**
      * Determine if a given string is an alias.
+     * 判断给定字符串是否为别名。
      *
      * @param  string  $name
      * @return bool
      */
     public function isAlias($name)
     {
-        return isset($this->aliases[$name]);
+        return isset($this-><a href="#$aliases">aliases</a>[$name]);
     }
 
     <hr id="bind">
@@ -241,7 +251,7 @@ class Container implements ArrayAccess, ContainerContract {
         // alias with the container so that it can be used as a shortcut for it.
         if (is_array($abstract))
         {
-            list($abstract, $alias) = $this->extractAlias($abstract);
+            <a href="http://php.net/manual/zh/function.list.php">list</a>($abstract, $alias) = $this->extractAlias($abstract);
 
             $this->alias($abstract, $alias);
         }
@@ -427,12 +437,15 @@ class Container implements ArrayAccess, ContainerContract {
         // We'll check to determine if this type has been bound before, and if it has
         // we will fire the rebound callbacks registered with the container and it
         // can be updated with consuming classes that have gotten resolved here.
+        // 判断给定类型是否已被绑定
         $bound = $this-><a href="Application.html#bound">bound</a>($abstract);
 
+        // 存储为当前容器的共享实例
         $this-><a href="#$instances">instances</a>[$abstract] = $instance;
 
-        if ($bound)
+        if ($bound) // 若给定类型已被绑定
         {
+            // 解绑
             $this-><a href="#rebound">rebound</a>($abstract);
         }
     }
@@ -473,7 +486,7 @@ class Container implements ArrayAccess, ContainerContract {
 
         foreach ($this->tags[$tag] as $abstract)
         {
-            $results[] = $this->make($abstract);
+            $results[] = $this-><a href="Application.html#make">make</a>($abstract);
         }
 
         return $results;
@@ -518,7 +531,7 @@ class Container implements ArrayAccess, ContainerContract {
     {
         $this->reboundCallbacks[$abstract][] = $callback;
 
-        if ($this->bound($abstract)) return $this->make($abstract);
+        if ($this->bound($abstract)) return $this-><a href="Application.html#make">make</a>($abstract);
     }
 
     <hr id="refresh">
@@ -547,11 +560,12 @@ class Container implements ArrayAccess, ContainerContract {
      */
     protected function rebound($abstract)
     {
-        $instance = $this->make($abstract);
+        // 获取抽象类实例
+        $instance = $this-><a href="Application.html#make">make</a>($abstract);
 
-        foreach ($this->getReboundCallbacks($abstract) as $callback)
+        foreach ($this-><a href="#getReboundCallbacks">getReboundCallbacks</a>($abstract) as $callback)
         {
-            call_user_func($callback, $this, $instance);
+            <a href="http://php.net/manual/zh/function.call-user-func.php">call_user_func</a>($callback, $this, $instance);
         }
     }
 
@@ -684,7 +698,7 @@ class Container implements ArrayAccess, ContainerContract {
         }
         elseif ($parameter->getClass())
         {
-            $dependencies[] = $this->make($parameter->getClass()->name);
+            $dependencies[] = $this-><a href="Application.html#make">make</a>($parameter->getClass()->name);
         }
         elseif ($parameter->isDefaultValueAvailable())
         {
@@ -715,15 +729,16 @@ class Container implements ArrayAccess, ContainerContract {
             throw new InvalidArgumentException("Method not provided.");
         }
 
-        return $this->call([$this->make($segments[0]), $method], $parameters);
+        return $this->call([$this-><a href="Application.html#make">make</a>($segments[0]), $method], $parameters);
     }
 
     <hr id="make">
     /**
      * Resolve the given type from the container.
+     * 从容器中解析给定类。
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  string  $abstract   抽象类
+     * @param  array   $parameters 参数数组
      * @return mixed
      */
     public function make($abstract, $parameters = [])
@@ -749,7 +764,7 @@ class Container implements ArrayAccess, ContainerContract {
         }
         else
         {
-            $object = $this->make($concrete, $parameters);
+            $object = $this-><a href="Application.html#make">make</a>($concrete, $parameters);
         }
 
         // If we defined any extenders for this type, we'll need to spin through them
@@ -983,7 +998,7 @@ class Container implements ArrayAccess, ContainerContract {
     {
         try
         {
-            return $this->make($parameter->getClass()->name);
+            return $this-><a href="Application.html#make">make</a>($parameter->getClass()->name);
         }
 
         // If we can not resolve the class instance, we will check to see if the value
@@ -1234,13 +1249,14 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="getAlias">
     /**
      * Get the alias for an abstract if available.
+     * 获取一个抽象的别名。
      *
      * @param  string  $abstract
      * @return string
      */
     protected function getAlias($abstract)
     {
-        return isset($this->aliases[$abstract]) ? $this->aliases[$abstract] : $abstract;
+        return isset($this-><a href="#$aliases">aliases</a>[$abstract]) ? $this-><a href="#$aliases">aliases</a>[$abstract] : $abstract;
     }
 
     <hr id="getBindings">
@@ -1263,7 +1279,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     protected function dropStaleInstances($abstract)
     {
-        unset($this->instances[$abstract], $this->aliases[$abstract]);
+        unset($this->instances[$abstract], $this-><a href="#$aliases">aliases</a>[$abstract]);
     }
 
     <hr id="forgetInstance">
@@ -1348,7 +1364,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function offsetGet($key)
     {
-        return $this->make($key);
+        return $this-><a href="Application.html#make">make</a>($key);
     }
 
     <hr id="offsetSet">

@@ -660,7 +660,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // the remaining services available to this application for immediate use.
         foreach ($this->deferredServices as $service => $provider)
         {
-            $this->loadDeferredProvider($service);
+            $this-><a href="#loadDeferredProvider">loadDeferredProvider</a>($service);
         }
 
         $this->deferredServices = array();
@@ -675,12 +675,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function loadDeferredProvider($service)
     {
-        if ( ! isset($this->deferredServices[$service]))
+        if ( ! isset($this-><a href="#$deferredServices">deferredServices</a>[$service]))
         {
             return;
         }
 
-        $provider = $this->deferredServices[$service];
+        $provider = $this-><a href="#$deferredServices">deferredServices</a>[$service];
 
         // If the service provider has not already been loaded and registered we can
         // register it with the application and remove the service from this list
@@ -704,7 +704,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // Once the provider that provides the deferred service has been registered we
         // will remove it from our local list of the deferred services with related
         // providers so that this container does not try to resolve it out again.
-        if ($service) unset($this->deferredServices[$service]);
+        if ($service) unset($this-><a href="#$deferredServices">deferredServices</a>[$service]);
 
         $this->register($instance = new $provider($this));
 
@@ -717,31 +717,37 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
     }
 
-    <hr id="make($abstract, $parameters = array">
+    <hr id="make">
     /**
      * Resolve the given type from the container.
+     * 从容器中解析给定类。
      *
      * (Overriding Container::make)
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  string  $abstract   抽象类
+     * @param  array   $parameters 参数数组
      * @return mixed
      */
     public function make($abstract, $parameters = array())
     {
-        $abstract = $this->getAlias($abstract);
+        // 获取抽象的别名
+        $abstract = $this-><a href="Container.html#getAlias">getAlias</a>($abstract);
 
-        if (isset($this->deferredServices[$abstract]))
+        // 若需延迟加载
+        if (isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]))
         {
-            $this->loadDeferredProvider($abstract);
+            // 调用延迟加载方法
+            $this-><a href="#loadDeferredProvider">loadDeferredProvider</a>($abstract);
         }
-
-        return parent::make($abstract, $parameters);
+        
+        // 调用父类 make 方法
+        return parent::<a href="Container.html#make">make</a>($abstract, $parameters);
     }
 
     <hr id="bound">
     /**
      * Determine if the given abstract type has been bound.
+     * 判断给定类型是否已被绑定。
      *
      * (Overriding Container::bound)
      *
@@ -750,7 +756,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function bound($abstract)
     {
-        // 判断是否为“延迟启动的服务”，或调用父类 bound 方法，判断
+        // 判断是否为“延迟启动的服务”，或调用父类 bound 方法，判断该抽象类是否为已被绑定
         return isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]) || parent::<a href="Container.html#bound">bound</a>($abstract);
     }
 
@@ -1102,7 +1108,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function isDeferredService($service)
     {
-        return isset($this->deferredServices[$service]);
+        return isset($this-><a href="#$deferredServices">deferredServices</a>[$service]);
     }
 
     <hr id="getLocale">

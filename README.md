@@ -9,7 +9,7 @@ Laravel 注释翻译、源码学习、完整包。
         <th>Laravel</th>
         <th>PHP</th>
         <th>当前项目版本</th>
-        <th>完整包</th>
+        <th>完整包下载</th>
         <th>源码阅读索引</th>
     </tr>
     <tr>
