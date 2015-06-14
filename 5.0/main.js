@@ -7,18 +7,21 @@ document.write(''
     +'</footer>'
 );
 
-// 构造 GitHub 链接
+// 构造特殊链接
 $('a').each(function () {
+
     var basePath   = 'https://github.com/5-say/learning-laravel-source-code/blob/5.0/',
-        Illuminate = basePath+'vendor/laravel/framework/src/Illuminate/';
+        Illuminate = basePath+'vendor/laravel/framework/src/Illuminate/',
+        url        = $(this).attr('href');
 
-    var url = $(this).attr('href');
-    $(this).attr('href', url.replace(/^@Illuminate/, Illuminate));
-    
-    var url = $(this).attr('href');
-    $(this).attr('href', url.replace(/^@/, basePath));
-
-    var url = $(this).attr('href');
-    if (url.search('https://github.com') == 0)
+    if (url.search('@') == 0) {
+        $(this).attr('href', url.replace(/^@Illuminate/, Illuminate).replace(/^@/, basePath));
         $(this).attr('target', '_blank');
+    } else if (url.search('php#') == 0) {
+        $(this).attr('href', url.replace(/_/g, '-').replace(/^php#(.+)/, 'http://php.net/manual/zh/function.$1.php'));
+        $(this).attr('target', '_blank');
+    } else if (url.search('http://my.oschina.net/5say/blog') == 0) {
+        $(this).attr('target', '_blank');
+    }
+
 });

@@ -251,7 +251,7 @@ class Container implements ArrayAccess, ContainerContract {
         // alias with the container so that it can be used as a shortcut for it.
         if (is_array($abstract))
         {
-            <a href="http://php.net/manual/zh/function.list.php">list</a>($abstract, $alias) = $this->extractAlias($abstract);
+            <a href="php#list">list</a>($abstract, $alias) = $this->extractAlias($abstract);
 
             $this->alias($abstract, $alias);
         }
@@ -565,7 +565,7 @@ class Container implements ArrayAccess, ContainerContract {
 
         foreach ($this-><a href="#getReboundCallbacks">getReboundCallbacks</a>($abstract) as $callback)
         {
-            <a href="http://php.net/manual/zh/function.call-user-func.php">call_user_func</a>($callback, $this, $instance);
+            <a href="php#call_user_func">call_user_func</a>($callback, $this, $instance);
         }
     }
 

@@ -210,9 +210,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         # $this-><a href="Container.html#instance">instance</a>(抽象类, 实例) 在容器中注册共享实例
 
-        $this->instance('app', $this);
+        $this-><a href="Container.html#instance">instance</a>('app', $this);
 
-        $this->instance('Illuminate\Container\Container', $this);
+        $this-><a href="Container.html#instance">instance</a>('Illuminate\Container\Container', $this);
     }
 
     <hr id="registerBaseServiceProviders">
@@ -304,15 +304,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="setBasePath">
     /**
      * Set the base path for the application.
+     * 设置应用程序的基础路径。
      *
-     * @param  string  $basePath
+     * @param  string  $basePath 基础路径
      * @return $this
      */
     public function setBasePath($basePath)
     {
         $this->basePath = $basePath;
 
-        $this->bindPathsInContainer();
+        $this-><a href="#bindPathsInContainer">bindPathsInContainer</a>();
 
         return $this;
     }
@@ -320,33 +321,36 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="bindPathsInContainer">
     /**
      * Bind all of the application paths in the container.
+     * 在容器中绑定所有应用程序路径。
      *
      * @return void
      */
     protected function bindPathsInContainer()
     {
-        $this->instance('path', $this->path());
+        $this-><a href="Container.html#instance">instance</a>('path', $this-><a href="#path">path</a>());
 
         foreach (['base', 'config', 'database', 'lang', 'public', 'storage'] as $path)
         {
-            $this->instance('path.'.$path, $this->{$path.'Path'}());
+            $this-><a href="Container.html#instance">instance</a>('path.'.$path, $this->{$path.'Path'}());
         }
     }
 
     <hr id="path">
     /**
      * Get the path to the application "app" directory.
+     * 获取应用程序的“app”目录的路径。
      *
      * @return string
      */
     public function path()
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'app';
+        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'app';
     }
 
     <hr id="basePath">
     /**
      * Get the base path of the Laravel installation.
+     * 获取安装 Laravel 的基础路径（根目录）。
      *
      * @return string
      */
@@ -358,28 +362,31 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="configPath">
     /**
      * Get the path to the application configuration files.
+     * 获取应用程序配置文件路径。
      *
      * @return string
      */
     public function configPath()
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'config';
+        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'config';
     }
 
     <hr id="databasePath">
     /**
      * Get the path to the database directory.
+     * 获取到数据库文件目录的路径。
      *
      * @return string
      */
     public function databasePath()
     {
-        return $this->databasePath ?: $this->basePath.DIRECTORY_SEPARATOR.'database';
+        return $this->databasePath ?: $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'database';
     }
 
     <hr id="useDatabasePath">
     /**
      * Set the database directory.
+     * 设置数据库文件目录。
      *
      * @param  string  $path
      * @return $this
@@ -388,7 +395,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->databasePath = $path;
 
-        $this->instance('path.database', $path);
+        $this-><a href="Container.html#instance">instance</a>('path.database', $path);
 
         return $this;
     }
@@ -396,39 +403,43 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="langPath">
     /**
      * Get the path to the language files.
+     * 获取语言文件路径。
      *
      * @return string
      */
     public function langPath()
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'lang';
+        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'resources'.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'lang';
     }
 
     <hr id="publicPath">
     /**
      * Get the path to the public / web directory.
+     * 获取网站 public 目录的路径。
      *
      * @return string
      */
     public function publicPath()
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'public';
+        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'public';
     }
 
     <hr id="storagePath">
     /**
      * Get the path to the storage directory.
+     * 获取缓存目录路径。
      *
      * @return string
      */
     public function storagePath()
     {
-        return $this->storagePath ?: $this->basePath.DIRECTORY_SEPARATOR.'storage';
+        return $this->storagePath ?: $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'storage';
     }
 
     <hr id="useStoragePath">
     /**
      * Set the storage directory.
+     * 设置缓存目录。
      *
      * @param  string  $path
      * @return $this
@@ -437,7 +448,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->storagePath = $path;
 
-        $this->instance('path.storage', $path);
+        $this-><a href="Container.html#instance">instance</a>('path.storage', $path);
 
         return $this;
     }
@@ -445,6 +456,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="loadEnvironmentFrom">
     /**
      * Set the environment file to be loaded during bootstrapping.
+     * 设置引导时需要加载的环境文件。
      *
      * @param  string  $file
      * @return $this
@@ -989,7 +1001,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function isDownForMaintenance()
     {
-        return file_exists($this->storagePath().DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'down');
+        return file_exists($this->storagePath().<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'framework'.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'down');
     }
 
     <hr id="down">
