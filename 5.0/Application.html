@@ -65,6 +65,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$basePath">
     /**
      * The base path for the Laravel installation.
+     * 安装 Laravel 的基础路径（根目录）。
      *
      * @var string
      */
@@ -179,7 +180,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this-><a href="#registerBaseBindings">registerBaseBindings</a>(); // 注册基础绑定
 
-        $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>(); // 注册所有的基础服务提供商
+        $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>(); // 注册所有的基础服务提供者
 
         $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>(); // 注册核心类别名
 
@@ -218,15 +219,20 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="registerBaseServiceProviders">
     /**
      * Register all of the base service providers.
-     * 注册所有的基础服务提供商
+     * 注册所有的基础服务提供者
      *
      * @return void
      */
     protected function registerBaseServiceProviders()
     {
-        $this->register(new EventServiceProvider($this));
+        // 统一调用服务提供者父类的 <a href="ServiceProvider.html#__construct">__construct</a>() 方法创建服务提供者实例。
+        // 使用 $this-><a href="#register">register</a>(服务提供者实例) 方法进行注册。
 
-        $this->register(new RoutingServiceProvider($this));
+        // 事件 Illuminate\Contracts\Queue\Queue
+        $this-><a href="#register">register</a>(new EventServiceProvider($this));
+
+        // 路由 
+        $this-><a href="#register">register</a>(new RoutingServiceProvider($this));
     }
 
     <hr id="bootstrapWith">
@@ -311,7 +317,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function setBasePath($basePath)
     {
-        $this->basePath = $basePath;
+        $this-><a href="#$basePath">basePath</a> = $basePath;
 
         $this-><a href="#bindPathsInContainer">bindPathsInContainer</a>();
 
@@ -344,7 +350,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function path()
     {
-        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'app';
+        return $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'app';
     }
 
     <hr id="basePath">
@@ -356,7 +362,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function basePath()
     {
-        return $this->basePath;
+        return $this-><a href="#$basePath">basePath</a>;
     }
 
     <hr id="configPath">
@@ -368,7 +374,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function configPath()
     {
-        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'config';
+        return $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'config';
     }
 
     <hr id="databasePath">
@@ -380,7 +386,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function databasePath()
     {
-        return $this->databasePath ?: $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'database';
+        return $this->databasePath ?: $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'database';
     }
 
     <hr id="useDatabasePath">
@@ -409,7 +415,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function langPath()
     {
-        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'resources'.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'lang';
+        return $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'resources'.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'lang';
     }
 
     <hr id="publicPath">
@@ -421,7 +427,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function publicPath()
     {
-        return $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'public';
+        return $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'public';
     }
 
     <hr id="storagePath">
@@ -433,7 +439,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function storagePath()
     {
-        return $this->storagePath ?: $this->basePath.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'storage';
+        return $this->storagePath ?: $this-><a href="#$basePath">basePath</a>.<a href="http://my.oschina.net/5say/blog/466583">DIRECTORY_SEPARATOR</a>.'storage';
     }
 
     <hr id="useStoragePath">
@@ -567,9 +573,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                     ->load($this->config['app.providers']);
     }
 
-    <hr id="register($provider, $options = array">
+    <hr id="register">
     /**
      * Register a service provider with the application.
+     * 在应用程序中注册一个服务提供者
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
      * @param  array  $options
@@ -718,7 +725,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // providers so that this container does not try to resolve it out again.
         if ($service) unset($this-><a href="#$deferredServices">deferredServices</a>[$service]);
 
-        $this->register($instance = new $provider($this));
+        $this-><a href="#register">register</a>($instance = new $provider($this));
 
         if ( ! $this->booted)
         {
@@ -878,7 +885,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if ($this->vendorIsWritableForOptimizations())
         {
-            return $this->basePath().'/vendor/config.php';
+            return $this-><a href="#$basePath">basePath</a>().'/vendor/config.php';
         }
         else
         {
@@ -907,7 +914,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if ($this->vendorIsWritableForOptimizations())
         {
-            return $this->basePath().'/vendor/routes.php';
+            return $this-><a href="#$basePath">basePath</a>().'/vendor/routes.php';
         }
         else
         {
@@ -925,7 +932,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if ($this->vendorIsWritableForOptimizations())
         {
-            return $this->basePath().'/vendor/compiled.php';
+            return $this-><a href="#$basePath">basePath</a>().'/vendor/compiled.php';
         }
         else
         {
@@ -943,7 +950,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if ($this->vendorIsWritableForOptimizations())
         {
-            return $this->basePath().'/vendor/services.json';
+            return $this-><a href="#$basePath">basePath</a>().'/vendor/services.json';
         }
         else
         {
@@ -961,7 +968,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if ($this->useStoragePathForOptimizations) return false;
 
-        return is_writable($this->basePath().'/vendor');
+        return is_writable($this-><a href="#$basePath">basePath</a>().'/vendor');
     }
 
     <hr id="useStoragePathForOptimizations">

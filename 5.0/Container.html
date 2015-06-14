@@ -131,7 +131,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$reboundCallbacks">
     /**
      * All of the registered rebound callbacks.
-     * 所有已注册的反弹回调。
+     * 所有已注册的 rebound 回调。
      *
      * @var array
      */
@@ -140,7 +140,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$globalResolvingCallbacks">
     /**
      * All of the global resolving callbacks.
-     * 所有全局解析中回调。
+     * 所有全局的解析中回调。
      *
      * @var array
      */
@@ -149,7 +149,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="$globalAfterResolvingCallbacks">
     /**
      * All of the global after resolving callbacks.
-     * 所有全局解析后回调。
+     * 所有全局的解析后回调。
      *
      * @var array
      */
@@ -445,7 +445,7 @@ class Container implements ArrayAccess, ContainerContract {
 
         if ($bound) // 若给定类型已被绑定
         {
-            // 解绑
+            // 触发指定抽象类的“rebound”回调。
             $this-><a href="#rebound">rebound</a>($abstract);
         }
     }
@@ -529,7 +529,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function rebinding($abstract, Closure $callback)
     {
-        $this->reboundCallbacks[$abstract][] = $callback;
+        $this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract][] = $callback;
 
         if ($this->bound($abstract)) return $this-><a href="Application.html#make">make</a>($abstract);
     }
@@ -554,6 +554,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="rebound">
     /**
      * Fire the "rebound" callbacks for the given abstract type.
+     * 触发指定抽象类的“rebound”回调。
      *
      * @param  string  $abstract
      * @return void
@@ -572,15 +573,16 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="getReboundCallbacks">
     /**
      * Get the rebound callbacks for a given type.
+     * 获取指定类的 rebound 回调。
      *
      * @param  string  $abstract
      * @return array
      */
     protected function getReboundCallbacks($abstract)
     {
-        if (isset($this->reboundCallbacks[$abstract]))
+        if (isset($this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract]))
         {
-            return $this->reboundCallbacks[$abstract];
+            return $this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract];
         }
 
         return [];
