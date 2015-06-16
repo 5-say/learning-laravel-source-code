@@ -15,7 +15,7 @@ Laravel 注释翻译、源码学习、完整包。
     <tr>
         <td>5.0</td>
         <td>&gt;= 5.4</td>
-        <td>跟进至 5.0.32</td>
+        <td>跟进至 5.0.33</td>
         <td><a href="https://github.com/5-say/learning-laravel-source-code/archive/5.0.zip">Download ZIP</a></td>
         <td><a href="http://5-say.github.io/learning-laravel-source-code/5.0/index.html">Learning . . .</a></td>
     </tr>

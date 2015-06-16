@@ -238,8 +238,9 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="bind">
     /**
      * Register a binding with the container.
+     * 在容器中注册一个绑定。
      *
-     * @param  string|array  $abstract
+     * @param  string|array  $abstract 抽象类|抽象类的数组
      * @param  \Closure|string|null  $concrete
      * @param  bool  $shared
      * @return void
@@ -249,17 +250,20 @@ class Container implements ArrayAccess, ContainerContract {
         // If the given types are actually an array, we will assume an alias is being
         // defined and will grab this "real" abstract class name and register this
         // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($abstract))
+        if (is_array($abstract)) // 若参数 abstract 为数组
         {
-            <a href="php#list">list</a>($abstract, $alias) = $this->extractAlias($abstract);
+            // 提取“抽象类”和“别名”
+            <a href="php#list">list</a>($abstract, $alias) = $this-><a href="#extractAlias">extractAlias</a>($abstract);
 
-            $this->alias($abstract, $alias);
+            // 存储抽象类的别名
+            $this-><a href="#alias">alias</a>($abstract, $alias);
         }
 
         // If no concrete type was given, we will simply set the concrete type to the
         // abstract type. This will allow concrete type to be registered as shared
         // without being forced to state their classes in both of the parameter.
-        $this->dropStaleInstances($abstract);
+        // 删除所有陈旧的实例和别名。
+        $this-><a href="#dropStaleInstances">dropStaleInstances</a>($abstract);
 
         if (is_null($concrete))
         {
@@ -269,9 +273,10 @@ class Container implements ArrayAccess, ContainerContract {
         // If the factory is not a Closure, it means it is just a class name which is
         // is bound into this container to the abstract type and we will just wrap
         // it up inside a Closure to make things more convenient when extending.
-        if ( ! $concrete instanceof Closure)
+        if ( ! $concrete instanceof Closure) // 变量 concrete 若非闭包
         {
-            $concrete = $this->getClosure($abstract, $concrete);
+            // 提取闭包
+            $concrete = $this-><a href="#getClosure">getClosure</a>($abstract, $concrete);
         }
 
         $this->bindings[$abstract] = compact('concrete', 'shared');
@@ -279,15 +284,17 @@ class Container implements ArrayAccess, ContainerContract {
         // If the abstract type was already resolved in this container we'll fire the
         // rebound listener so that any objects which have already gotten resolved
         // can have their copy of the object updated via the listener callbacks.
-        if ($this->resolved($abstract))
+        if ($this-><a href="#resolved">resolved</a>($abstract)) // 若抽象类已被解析
         {
-            $this->rebound($abstract);
+            // 触发指定抽象类的“rebound”回调
+            $this-><a href="#rebound">rebound</a>($abstract);
         }
     }
 
     <hr id="getClosure">
     /**
      * Get the Closure to be used when building a type.
+     * 获取构建类时需要使用的闭包。
      *
      * @param  string  $abstract
      * @param  string  $concrete
@@ -329,13 +336,14 @@ class Container implements ArrayAccess, ContainerContract {
     {
         if ( ! $this->bound($abstract))
         {
-            $this->bind($abstract, $concrete, $shared);
+            $this-><a href="#bind">bind</a>($abstract, $concrete, $shared);
         }
     }
 
     <hr id="singleton">
     /**
      * Register a shared binding in the container.
+     * 在容器中注册一个共享绑定。
      *
      * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
@@ -343,7 +351,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function singleton($abstract, $concrete = null)
     {
-        $this->bind($abstract, $concrete, true);
+        $this-><a href="#bind">bind</a>($abstract, $concrete, true);
     }
 
     <hr id="share">
@@ -381,7 +389,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function bindShared($abstract, Closure $closure)
     {
-        $this->bind($abstract, $this->share($closure), true);
+        $this-><a href="#bind">bind</a>($abstract, $this->share($closure), true);
     }
 
     <hr id="extend">
@@ -400,7 +408,7 @@ class Container implements ArrayAccess, ContainerContract {
         {
             $this->instances[$abstract] = $closure($this->instances[$abstract], $this);
 
-            $this->rebound($abstract);
+            $this-><a href="#rebound">rebound</a>($abstract);
         }
         else
         {
@@ -484,9 +492,12 @@ class Container implements ArrayAccess, ContainerContract {
     {
         $results = [];
 
-        foreach ($this->tags[$tag] as $abstract)
+        if (isset($this->tags[$tag]))
         {
-            $results[] = $this-><a href="Application.html#make">make</a>($abstract);
+            foreach ($this->tags[$tag] as $abstract)
+            {
+                $results[] = $this-><a href="Application.html#make">make</a>($abstract);
+            }
         }
 
         return $results;
@@ -1275,6 +1286,7 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="dropStaleInstances">
     /**
      * Drop all of the stale instances and aliases.
+     * 删除所有陈旧的实例和别名。
      *
      * @param  string  $abstract
      * @return void
@@ -1390,7 +1402,7 @@ class Container implements ArrayAccess, ContainerContract {
             };
         }
 
-        $this->bind($key, $value);
+        $this-><a href="#bind">bind</a>($key, $value);
     }
 
     <hr id="offsetUnset">

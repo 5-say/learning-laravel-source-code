@@ -60,7 +60,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @var string
      */
-    const VERSION = '5.0.32';
+    const VERSION = '5.0.33';
 
     <hr id="$basePath">
     /**
@@ -1207,7 +1207,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         {
             foreach ((array) $aliases as $alias)
             {
-                $this->alias($key, $alias);
+                // 在容器的别名数组中存储指定抽象类的别名。
+                $this-><a href="Container.html#alias">alias</a>($key, $alias);
             }
         }
     }
