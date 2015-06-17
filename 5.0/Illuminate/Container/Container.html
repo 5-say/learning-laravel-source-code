@@ -4,9 +4,9 @@
         <meta charset="UTF-8">
         <title>Learning-laravel-source-code by 5-say</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
         <style>
             .l2 { margin-left: 2em; }
             .l3 { margin-left: 4em; }
@@ -14,16 +14,16 @@
             pre a { border-bottom: dotted 2px #9FCCFC; }
             pre a:hover span { color: #6AB0F7; }
         </style>
-        <link rel="stylesheet" href="../highlight/src/styles/obsidian.css">
-        <script src="../highlight/src/highlight.pack.js"></script>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
-        <script src="../highlight/src/jquery-2.1.1.min.js"></script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
     </head>
     <body>
         <section class="page-header" style="padding: 0;">
             <h1 class="project-name">Learning-laravel-source-code</h1>
             <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
-            <a href="../index.html" class="btn">回到首页</a>
+            <a href="../../../index.html" class="btn">回到首页</a>
             <a href="index.html" class="btn">入口文件</a>
             <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
         </section>
@@ -433,7 +433,7 @@ class Container implements ArrayAccess, ContainerContract {
         if (is_array($abstract))
         {
             // 若 abstract 参数为数组，则从中提取抽象类与别名
-            <a href="../php.html#list">list</a>($abstract, $alias) = $this-><a href="#extractAlias">extractAlias</a>($abstract);
+            <a href="php#list">list</a>($abstract, $alias) = $this-><a href="#extractAlias">extractAlias</a>($abstract);
 
             // 在容器的别名数组中存储指定抽象类的别名
             $this-><a href="#alias">alias</a>($abstract, $alias);
@@ -446,7 +446,7 @@ class Container implements ArrayAccess, ContainerContract {
         // we will fire the rebound callbacks registered with the container and it
         // can be updated with consuming classes that have gotten resolved here.
         // 判断给定类型是否已被绑定
-        $bound = $this-><a href="Application.html#bound">bound</a>($abstract);
+        $bound = $this-><a href="../Foundation/Application.html#bound">bound</a>($abstract);
 
         // 存储为当前容器的共享实例
         $this-><a href="#$instances">instances</a>[$abstract] = $instance;
@@ -496,7 +496,7 @@ class Container implements ArrayAccess, ContainerContract {
         {
             foreach ($this->tags[$tag] as $abstract)
             {
-                $results[] = $this-><a href="Application.html#make">make</a>($abstract);
+                $results[] = $this-><a href="../Foundation/Application.html#make">make</a>($abstract);
             }
         }
 
@@ -527,7 +527,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     protected function extractAlias(array $definition)
     {
-        return [<a href="../php.html#key">key</a>($definition), <a href="../php.html#current">current</a>($definition)];
+        return [<a href="php#key">key</a>($definition), <a href="php#current">current</a>($definition)];
     }
 
     <hr id="rebinding">
@@ -542,7 +542,7 @@ class Container implements ArrayAccess, ContainerContract {
     {
         $this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract][] = $callback;
 
-        if ($this->bound($abstract)) return $this-><a href="Application.html#make">make</a>($abstract);
+        if ($this->bound($abstract)) return $this-><a href="../Foundation/Application.html#make">make</a>($abstract);
     }
 
     <hr id="refresh">
@@ -573,7 +573,7 @@ class Container implements ArrayAccess, ContainerContract {
     protected function rebound($abstract)
     {
         // 获取抽象类实例
-        $instance = $this-><a href="Application.html#make">make</a>($abstract);
+        $instance = $this-><a href="../Foundation/Application.html#make">make</a>($abstract);
 
         foreach ($this-><a href="#getReboundCallbacks">getReboundCallbacks</a>($abstract) as $callback)
         {
@@ -711,7 +711,7 @@ class Container implements ArrayAccess, ContainerContract {
         }
         elseif ($parameter->getClass())
         {
-            $dependencies[] = $this-><a href="Application.html#make">make</a>($parameter->getClass()->name);
+            $dependencies[] = $this-><a href="../Foundation/Application.html#make">make</a>($parameter->getClass()->name);
         }
         elseif ($parameter->isDefaultValueAvailable())
         {
@@ -742,7 +742,7 @@ class Container implements ArrayAccess, ContainerContract {
             throw new InvalidArgumentException("Method not provided.");
         }
 
-        return $this->call([$this-><a href="Application.html#make">make</a>($segments[0]), $method], $parameters);
+        return $this->call([$this-><a href="../Foundation/Application.html#make">make</a>($segments[0]), $method], $parameters);
     }
 
     <hr id="make">
@@ -777,7 +777,7 @@ class Container implements ArrayAccess, ContainerContract {
         }
         else
         {
-            $object = $this-><a href="Application.html#make">make</a>($concrete, $parameters);
+            $object = $this-><a href="../Foundation/Application.html#make">make</a>($concrete, $parameters);
         }
 
         // If we defined any extenders for this type, we'll need to spin through them
@@ -1011,7 +1011,7 @@ class Container implements ArrayAccess, ContainerContract {
     {
         try
         {
-            return $this-><a href="Application.html#make">make</a>($parameter->getClass()->name);
+            return $this-><a href="../Foundation/Application.html#make">make</a>($parameter->getClass()->name);
         }
 
         // If we can not resolve the class instance, we will check to see if the value
@@ -1378,7 +1378,7 @@ class Container implements ArrayAccess, ContainerContract {
      */
     public function offsetGet($key)
     {
-        return $this-><a href="Application.html#make">make</a>($key);
+        return $this-><a href="../Foundation/Application.html#make">make</a>($key);
     }
 
     <hr id="offsetSet">
@@ -1450,7 +1450,7 @@ class Container implements ArrayAccess, ContainerContract {
 
 
 
-            <script src="main.js"></script>
+            <script src="../../main.js"></script>
 
         </section>
 

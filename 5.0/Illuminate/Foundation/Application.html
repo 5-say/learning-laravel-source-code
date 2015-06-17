@@ -4,9 +4,9 @@
         <meta charset="UTF-8">
         <title>Learning-laravel-source-code by 5-say</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/normalize.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="../stylesheets/github-light.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
         <style>
             .l2 { margin-left: 2em; }
             .l3 { margin-left: 4em; }
@@ -14,23 +14,23 @@
             pre a { border-bottom: dotted 2px #9FCCFC; }
             pre a:hover span { color: #6AB0F7; }
         </style>
-        <link rel="stylesheet" href="../highlight/src/styles/obsidian.css">
-        <script src="../highlight/src/highlight.pack.js"></script>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
-        <script src="../highlight/src/jquery-2.1.1.min.js"></script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
     </head>
     <body>
         <section class="page-header" style="padding: 0;">
             <h1 class="project-name">Learning-laravel-source-code</h1>
             <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
-            <a href="../index.html" class="btn">回到首页</a>
+            <a href="../../../index.html" class="btn">回到首页</a>
             <a href="index.html" class="btn">入口文件</a>
             <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
         </section>
 
         <section class="main-content">
 
-            <h2><a href="@vendor/laravel/framework/src/Illuminate/Foundation/Application.php">Illuminate/Foundation/Application.php</a></h2>
+            <h2><a href="@Illuminate/Foundation/Application.php">Illuminate/Foundation/Application.php</a></h2>
 
 
 
@@ -207,13 +207,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function registerBaseBindings()
     {
-        static::<a href="Container.html#setInstance">setInstance</a>($this); // 将当前容器设置为共享实例
+        static::<a href="../Container/Container.html#setInstance">setInstance</a>($this); // 将当前容器设置为共享实例
 
-        # $this-><a href="Container.html#instance">instance</a>(抽象类, 实例) 在容器中注册共享实例
+        # $this-><a href="../Container/Container.html#instance">instance</a>(抽象类, 实例) 在容器中注册共享实例
 
-        $this-><a href="Container.html#instance">instance</a>('app', $this);
+        $this-><a href="../Container/Container.html#instance">instance</a>('app', $this);
 
-        $this-><a href="Container.html#instance">instance</a>('Illuminate\Container\Container', $this);
+        $this-><a href="../Container/Container.html#instance">instance</a>('Illuminate\Container\Container', $this);
     }
 
     <hr id="registerBaseServiceProviders">
@@ -333,11 +333,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function bindPathsInContainer()
     {
-        $this-><a href="Container.html#instance">instance</a>('path', $this-><a href="#path">path</a>());
+        $this-><a href="../Container/Container.html#instance">instance</a>('path', $this-><a href="#path">path</a>());
 
         foreach (['base', 'config', 'database', 'lang', 'public', 'storage'] as $path)
         {
-            $this-><a href="Container.html#instance">instance</a>('path.'.$path, $this->{$path.'Path'}());
+            $this-><a href="../Container/Container.html#instance">instance</a>('path.'.$path, $this->{$path.'Path'}());
         }
     }
 
@@ -401,7 +401,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->databasePath = $path;
 
-        $this-><a href="Container.html#instance">instance</a>('path.database', $path);
+        $this-><a href="../Container/Container.html#instance">instance</a>('path.database', $path);
 
         return $this;
     }
@@ -454,7 +454,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->storagePath = $path;
 
-        $this-><a href="Container.html#instance">instance</a>('path.storage', $path);
+        $this-><a href="../Container/Container.html#instance">instance</a>('path.storage', $path);
 
         return $this;
     }
@@ -750,7 +750,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function make($abstract, $parameters = array())
     {
         // 获取抽象的别名
-        $abstract = $this-><a href="Container.html#getAlias">getAlias</a>($abstract);
+        $abstract = $this-><a href="../Container/Container.html#getAlias">getAlias</a>($abstract);
 
         // 若需延迟加载
         if (isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]))
@@ -760,7 +760,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
         
         // 调用父类 make 方法
-        return parent::<a href="Container.html#make">make</a>($abstract, $parameters);
+        return parent::<a href="../Container/Container.html#make">make</a>($abstract, $parameters);
     }
 
     <hr id="bound">
@@ -776,7 +776,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function bound($abstract)
     {
         // 判断是否为“延迟启动的服务”，或调用父类 bound 方法，判断该抽象类是否为已被绑定
-        return isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]) || parent::<a href="Container.html#bound">bound</a>($abstract);
+        return isset($this-><a href="#$deferredServices">deferredServices</a>[$abstract]) || parent::<a href="../Container/Container.html#bound">bound</a>($abstract);
     }
 
     <hr id="isBooted">
@@ -1208,7 +1208,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             foreach ((array) $aliases as $alias)
             {
                 // 在容器的别名数组中存储指定抽象类的别名。
-                $this-><a href="Container.html#alias">alias</a>($key, $alias);
+                $this-><a href="../Container/Container.html#alias">alias</a>($key, $alias);
             }
         }
     }
@@ -1235,7 +1235,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
 
 
-            <script src="main.js"></script>
+            <script src="../../main.js"></script>
 
         </section>
 

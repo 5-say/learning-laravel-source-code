@@ -11,7 +11,7 @@ document.write(''
 $('a').each(function () {
 
     var basePath   = 'https://github.com/5-say/learning-laravel-source-code/blob/5.0/',
-        Illuminate = basePath+'vendor/laravel/framework/src/Illuminate/',
+        Illuminate = basePath+'vendor/laravel/framework/src/Illuminate',
         url        = $(this).attr('href');
 
     if (url.search('@') == 0) {

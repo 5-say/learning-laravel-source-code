@@ -59,7 +59,7 @@ $app = require_once __DIR__.'/../<a href="@bootstrap/app.php">bootstrap/app.php<
 
 <pre class="l2"><code class="php"># 实例化应用程序
 
-// <a href="Application.html#__construct">Illuminate/Foundation/Application.php@__construct</a>
+// <a href="Illuminate/Foundation/Application.html#__construct">Illuminate/Foundation/Application.php@__construct</a>
 $app = new Illuminate\Foundation\Application(
     <a href="php#realpath">realpath</a>(__DIR__.'/../') // 应用程序基础路径（根目录）
 );
@@ -67,33 +67,33 @@ $app = new Illuminate\Foundation\Application(
 
 # 绑定重要接口
 
-// $app-><a href="Container.html#singleton">singleton</a>(); 在容器中注册一个共享绑定（注册单例）
+// $app-><a href="Illuminate/Container/Container.html#singleton">singleton</a>(); 在容器中注册一个共享绑定（注册单例）
 
 // http
-$app-><a href="Container.html#singleton">singleton</a>(
+$app-><a href="Illuminate/Container/Container.html#singleton">singleton</a>(
     'Illuminate\Contracts\Http\Kernel',
     'App\Http\Kernel'
 );
 // 控制台
-$app-><a href="Container.html#singleton">singleton</a>(
+$app-><a href="Illuminate/Container/Container.html#singleton">singleton</a>(
     'Illuminate\Contracts\Console\Kernel',
     'App\Console\Kernel'
 );
 // 异常处理
-$app-><a href="Container.html#singleton">singleton</a>(
+$app-><a href="Illuminate/Container/Container.html#singleton">singleton</a>(
     'Illuminate\Contracts\Debug\ExceptionHandler',
     'App\Exceptions\Handler'
 );
 
 # 返回应用程序实例
-// <a href="Application.html">Illuminate/Foundation/Application.php</a>
+// <a href="Illuminate/Foundation/Application.html">Illuminate/Foundation/Application.php</a>
 return $app;
 </code></pre>
 
 <pre><code class="php"># 运行应用程序
-$kernel = $app-><a href="Application.html#make">make</a>('Illuminate\Contracts\Http\Kernel');
+$kernel = $app-><a href="Illuminate/Foundation/Application.html#make">make</a>('Illuminate\Contracts\Http\Kernel');
 
-$response = $kernel->handle(
+$response = $kernel-><a href="Illuminate/Foundation/Http/Kernel.html#handle">handle</a>(
     $request = Illuminate\Http\Request::capture()
 );
 
