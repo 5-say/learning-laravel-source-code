@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Http/Request.php">Illuminate/Http/Request.php</a></h2>
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Http;
+
+use Closure;
+use ArrayAccess;
+use SplFileInfo;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+
+class Request extends SymfonyRequest implements ArrayAccess {
+
+    <hr id="$json">
+    /**
+     * The decoded JSON content for the request.
+     *
+     * @var string
+     */
+    protected $json;
+
+    <hr id="$sessionStore">
+    /**
+     * The Illuminate session store implementation.
+     *
+     * @var \Illuminate\Session\Store
+     */
+    protected $sessionStore;
+
+    <hr id="$userResolver">
+    /**
+     * The user resolver callback.
+     *
+     * @var \Closure
+     */
+    protected $userResolver;
+
+    <hr id="$routeResolver">
+    /**
+     * The route resolver callback.
+     *
+     * @var \Closure
+     */
+    protected $routeResolver;
+
+    <hr id="capture">
+    /**
+     * Create a new Illuminate HTTP request from server variables.
+     * 从服务器变量创建一个新的 Illuminate HTTP 请求。
+     *
+     * @return static
+     */
+    public static function capture()
+    {
+        // 启用 HTTP 方法参数重写
+        static::enableHttpMethodParameterOverride();
+
+        return static::createFromBase(SymfonyRequest::createFromGlobals());
+    }
+
+    <hr id="instance">
+    /**
+     * Return the Request instance.
+     *
+     * @return $this
+     */
+    public function instance()
+    {
+        return $this;
+    }
+
+    <hr id="method">
+    /**
+     * Get the request method.
+     *
+     * @return string
+     */
+    public function method()
+    {
+        return $this->getMethod();
+    }
+
+    <hr id="root">
+    /**
+     * Get the root URL for the application.
+     *
+     * @return string
+     */
+    public function root()
+    {
+        return rtrim($this->getSchemeAndHttpHost().$this->getBaseUrl(), '/');
+    }
+
+    <hr id="url">
+    /**
+     * Get the URL (no query string) for the request.
+     *
+     * @return string
+     */
+    public function url()
+    {
+        return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+    }
+
+    <hr id="fullUrl">
+    /**
+     * Get the full URL for the request.
+     *
+     * @return string
+     */
+    public function fullUrl()
+    {
+        $query = $this->getQueryString();
+
+        return $query ? $this->url().'?'.$query : $this->url();
+    }
+
+    <hr id="path">
+    /**
+     * Get the current path info for the request.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        $pattern = trim($this->getPathInfo(), '/');
+
+        return $pattern == '' ? '/' : $pattern;
+    }
+
+    <hr id="decodedPath">
+    /**
+     * Get the current encoded path info for the request.
+     *
+     * @return string
+     */
+    public function decodedPath()
+    {
+        return rawurldecode($this->path());
+    }
+
+    <hr id="segment">
+    /**
+     * Get a segment from the URI (1 based index).
+     *
+     * @param  int  $index
+     * @param  mixed  $default
+     * @return string
+     */
+    public function segment($index, $default = null)
+    {
+        return array_get($this->segments(), $index - 1, $default);
+    }
+
+    <hr id="segments">
+    /**
+     * Get all of the segments for the request path.
+     *
+     * @return array
+     */
+    public function segments()
+    {
+        $segments = explode('/', $this->path());
+
+        return array_values(array_filter($segments, function($v) { return $v != ''; }));
+    }
+
+    <hr id="is">
+    /**
+     * Determine if the current request URI matches a pattern.
+     *
+     * @param  mixed  string
+     * @return bool
+     */
+    public function is()
+    {
+        foreach (func_get_args() as $pattern)
+        {
+            if (str_is($pattern, urldecode($this->path())))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    <hr id="ajax">
+    /**
+     * Determine if the request is the result of an AJAX call.
+     *
+     * @return bool
+     */
+    public function ajax()
+    {
+        return $this->isXmlHttpRequest();
+    }
+
+    <hr id="pjax">
+    /**
+     * Determine if the request is the result of an PJAX call.
+     *
+     * @return bool
+     */
+    public function pjax()
+    {
+        return $this->headers->get('X-PJAX') == true;
+    }
+
+    <hr id="secure">
+    /**
+     * Determine if the request is over HTTPS.
+     *
+     * @return bool
+     */
+    public function secure()
+    {
+        return $this->isSecure();
+    }
+
+    <hr id="ip">
+    /**
+     * Returns the client IP address.
+     *
+     * @return string
+     */
+    public function ip()
+    {
+        return $this->getClientIp();
+    }
+
+    <hr id="ips">
+    /**
+     * Returns the client IP addresses.
+     *
+     * @return array
+     */
+    public function ips()
+    {
+        return $this->getClientIps();
+    }
+
+    <hr id="exists">
+    /**
+     * Determine if the request contains a given input item key.
+     *
+     * @param  string|array  $key
+     * @return bool
+     */
+    public function exists($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        $input = $this->all();
+
+        foreach ($keys as $value)
+        {
+            if ( ! array_key_exists($value, $input)) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the request contains a non-empty value for an input item.
+     *
+     * @param  string|array  $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        foreach ($keys as $value)
+        {
+            if ($this->isEmptyString($value)) return false;
+        }
+
+        return true;
+    }
+
+    <hr id="isEmptyString">
+    /**
+     * Determine if the given input key is an empty string for "has".
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    protected function isEmptyString($key)
+    {
+        $boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
+
+        return ! $boolOrArray && trim((string) $this->input($key)) === '';
+    }
+
+    <hr id="all">
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return array_replace_recursive($this->input(), $this->files->all());
+    }
+
+    <hr id="input">
+    /**
+     * Retrieve an input item from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function input($key = null, $default = null)
+    {
+        $input = $this->getInputSource()->all() + $this->query->all();
+
+        return array_get($input, $key, $default);
+    }
+
+    <hr id="only">
+    /**
+     * Get a subset of the items from the input data.
+     *
+     * @param  array  $keys
+     * @return array
+     */
+    public function only($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $results = [];
+
+        $input = $this->all();
+
+        foreach ($keys as $key)
+        {
+            array_set($results, $key, array_get($input, $key));
+        }
+
+        return $results;
+    }
+
+    <hr id="except">
+    /**
+     * Get all of the input except for a specified array of items.
+     *
+     * @param  array  $keys
+     * @return array
+     */
+    public function except($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $results = $this->all();
+
+        array_forget($results, $keys);
+
+        return $results;
+    }
+
+    <hr id="query">
+    /**
+     * Retrieve a query string item from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function query($key = null, $default = null)
+    {
+        return $this->retrieveItem('query', $key, $default);
+    }
+
+    <hr id="hasCookie">
+    /**
+     * Determine if a cookie is set on the request.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function hasCookie($key)
+    {
+        return ! is_null($this->cookie($key));
+    }
+
+    <hr id="cookie">
+    /**
+     * Retrieve a cookie from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function cookie($key = null, $default = null)
+    {
+        return $this->retrieveItem('cookies', $key, $default);
+    }
+
+    <hr id="file">
+    /**
+     * Retrieve a file from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile|array
+     */
+    public function file($key = null, $default = null)
+    {
+        return array_get($this->files->all(), $key, $default);
+    }
+
+    <hr id="hasFile">
+    /**
+     * Determine if the uploaded data contains a file.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function hasFile($key)
+    {
+        if ( ! is_array($files = $this->file($key))) $files = array($files);
+
+        foreach ($files as $file)
+        {
+            if ($this->isValidFile($file)) return true;
+        }
+
+        return false;
+    }
+
+    <hr id="isValidFile">
+    /**
+     * Check that the given file is a valid file instance.
+     *
+     * @param  mixed  $file
+     * @return bool
+     */
+    protected function isValidFile($file)
+    {
+        return $file instanceof SplFileInfo && $file->getPath() != '';
+    }
+
+    <hr id="header">
+    /**
+     * Retrieve a header from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function header($key = null, $default = null)
+    {
+        return $this->retrieveItem('headers', $key, $default);
+    }
+
+    <hr id="server">
+    /**
+     * Retrieve a server variable from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function server($key = null, $default = null)
+    {
+        return $this->retrieveItem('server', $key, $default);
+    }
+
+    <hr id="old">
+    /**
+     * Retrieve an old input item.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    public function old($key = null, $default = null)
+    {
+        return $this->session()->getOldInput($key, $default);
+    }
+
+    <hr id="flash($filter = null, $keys = array">
+    /**
+     * Flash the input for the current request to the session.
+     *
+     * @param  string  $filter
+     * @param  array   $keys
+     * @return void
+     */
+    public function flash($filter = null, $keys = array())
+    {
+        $flash = ( ! is_null($filter)) ? $this->$filter($keys) : $this->input();
+
+        $this->session()->flashInput($flash);
+    }
+
+    <hr id="flashOnly">
+    /**
+     * Flash only some of the input to the session.
+     *
+     * @param  mixed  string
+     * @return void
+     */
+    public function flashOnly($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        return $this->flash('only', $keys);
+    }
+
+    <hr id="flashExcept">
+    /**
+     * Flash only some of the input to the session.
+     *
+     * @param  mixed  string
+     * @return void
+     */
+    public function flashExcept($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        return $this->flash('except', $keys);
+    }
+
+    <hr id="flush">
+    /**
+     * Flush all of the old input from the session.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        $this->session()->flashInput(array());
+    }
+
+    <hr id="retrieveItem">
+    /**
+     * Retrieve a parameter item from a given source.
+     *
+     * @param  string  $source
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    protected function retrieveItem($source, $key, $default)
+    {
+        if (is_null($key))
+        {
+            return $this->$source->all();
+        }
+
+        return $this->$source->get($key, $default, true);
+    }
+
+    <hr id="merge">
+    /**
+     * Merge new input into the current request's input array.
+     *
+     * @param  array  $input
+     * @return void
+     */
+    public function merge(array $input)
+    {
+        $this->getInputSource()->add($input);
+    }
+
+    <hr id="replace">
+    /**
+     * Replace the input for the current request.
+     *
+     * @param  array  $input
+     * @return void
+     */
+    public function replace(array $input)
+    {
+        $this->getInputSource()->replace($input);
+    }
+
+    <hr id="json">
+    /**
+     * Get the JSON payload for the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    public function json($key = null, $default = null)
+    {
+        if ( ! isset($this->json))
+        {
+            $this->json = new ParameterBag((array) json_decode($this->getContent(), true));
+        }
+
+        if (is_null($key)) return $this->json;
+
+        return array_get($this->json->all(), $key, $default);
+    }
+
+    <hr id="getInputSource">
+    /**
+     * Get the input source for the request.
+     *
+     * @return \Symfony\Component\HttpFoundation\ParameterBag
+     */
+    protected function getInputSource()
+    {
+        if ($this->isJson()) return $this->json();
+
+        return $this->getMethod() == 'GET' ? $this->query : $this->request;
+    }
+
+    <hr id="isJson">
+    /**
+     * Determine if the request is sending JSON.
+     *
+     * @return bool
+     */
+    public function isJson()
+    {
+        return str_contains($this->header('CONTENT_TYPE'), '/json');
+    }
+
+    <hr id="wantsJson">
+    /**
+     * Determine if the current request is asking for JSON in return.
+     *
+     * @return bool
+     */
+    public function wantsJson()
+    {
+        $acceptable = $this->getAcceptableContentTypes();
+
+        return isset($acceptable[0]) && $acceptable[0] == 'application/json';
+    }
+
+    <hr id="format">
+    /**
+     * Get the data format expected in the response.
+     *
+     * @param  string  $default
+     * @return string
+     */
+    public function format($default = 'html')
+    {
+        foreach ($this->getAcceptableContentTypes() as $type)
+        {
+            if ($format = $this->getFormat($type)) return $format;
+        }
+
+        return $default;
+    }
+
+    <hr id="createFromBase">
+    /**
+     * Create an Illuminate request from a Symfony instance.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @return \Illuminate\Http\Request
+     */
+    public static function createFromBase(SymfonyRequest $request)
+    {
+        if ($request instanceof static) return $request;
+
+        $content = $request->content;
+
+        $request = (new static)->duplicate(
+
+            $request->query->all(), $request->request->all(), $request->attributes->all(),
+
+            $request->cookies->all(), $request->files->all(), $request->server->all()
+        );
+
+        $request->content = $content;
+
+        $request->request = $request->getInputSource();
+
+        return $request;
+    }
+
+    <hr id="duplicate">
+    /**
+     * {@inheritdoc}
+     */
+    public function duplicate(array $query = null, array $request = null, array $attributes = null, array $cookies = null, array $files = null, array $server = null)
+    {
+        return parent::duplicate($query, $request, $attributes, $cookies, array_filter((array) $files), $server);
+    }
+
+    <hr id="session">
+    /**
+     * Get the session associated with the request.
+     *
+     * @return \Illuminate\Session\Store
+     *
+     * @throws \RuntimeException
+     */
+    public function session()
+    {
+        if ( ! $this->hasSession())
+        {
+            throw new RuntimeException("Session store not set on request.");
+        }
+
+        return $this->getSession();
+    }
+
+    <hr id="user">
+    /**
+     * Get the user making the request.
+     *
+     * @return mixed
+     */
+    public function user()
+    {
+        return call_user_func($this->getUserResolver());
+    }
+
+    <hr id="route">
+    /**
+     * Get the route handling the request.
+     *
+     * @return \Illuminate\Routing\Route|null
+     */
+    public function route()
+    {
+        if (func_num_args() == 1)
+        {
+            return $this->route()->parameter(func_get_arg(0));
+        }
+        else
+        {
+            return call_user_func($this->getRouteResolver());
+        }
+    }
+
+    <hr id="getUserResolver">
+    /**
+     * Get the user resolver callback.
+     *
+     * @return \Closure
+     */
+    public function getUserResolver()
+    {
+        return $this->userResolver ?: function() {};
+    }
+
+    <hr id="setUserResolver">
+    /**
+     * Set the user resolver callback.
+     *
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function setUserResolver(Closure $callback)
+    {
+        $this->userResolver = $callback;
+
+        return $this;
+    }
+
+    <hr id="getRouteResolver">
+    /**
+     * Get the route resolver callback.
+     *
+     * @return \Closure
+     */
+    public function getRouteResolver()
+    {
+        return $this->routeResolver ?: function() {};
+    }
+
+    <hr id="setRouteResolver">
+    /**
+     * Set the route resolver callback.
+     *
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function setRouteResolver(Closure $callback)
+    {
+        $this->routeResolver = $callback;
+
+        return $this;
+    }
+
+    <hr id="offsetExists">
+    /**
+     * Determine if the given offset exists.
+     *
+     * @param  string  $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->all());
+    }
+
+    <hr id="offsetGet">
+    /**
+     * Get the value at the given offset.
+     *
+     * @param  string  $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->input($offset);
+    }
+
+    <hr id="offsetSet">
+    /**
+     * Set the value at the given offset.
+     *
+     * @param  string  $offset
+     * @param  mixed  $value
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        return $this->getInputSource()->set($offset, $value);
+    }
+
+    <hr id="offsetUnset">
+    /**
+     * Remove the value at the given offset.
+     *
+     * @param  string  $offset
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        return $this->getInputSource()->remove($offset);
+    }
+
+    <hr id="__get">
+    /**
+     * Get an input element from the request.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        $input = $this->input();
+
+        if (array_key_exists($key, $input))
+        {
+            return $this->input($key);
+        }
+        elseif ( ! is_null($this->route()))
+        {
+            return $this->route()->parameter($key);
+        }
+    }
+
+}
+
+</code></pre>
+
+
+
+
+
+            <script src="../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>

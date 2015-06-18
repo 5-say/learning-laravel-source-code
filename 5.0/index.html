@@ -93,13 +93,17 @@ return $app;
 <pre><code class="php"># 运行应用程序
 $kernel = $app-><a href="Illuminate/Foundation/Application.html#make">make</a>('Illuminate\Contracts\Http\Kernel');
 
+// 处理传入的 HTTP 请求，并获取响应实例
 $response = $kernel-><a href="Illuminate/Foundation/Http/Kernel.html#handle">handle</a>(
-    $request = Illuminate\Http\Request::capture()
+    // 从服务器变量创建一个新的 Illuminate HTTP 请求实例
+    $request = Illuminate\Http\Request::<a href="Illuminate/Http/Request.html#capture">capture</a>()
 );
 
-$response->send();
+// 发送响应
+$response-><a href="Symfony/Component/HttpFoundation/Response.html#send">send</a>();
 
-$kernel->terminate($request, $response);
+// 在所有需要结束的中间件中调用 terminate 方法
+$kernel-><a href="Illuminate/Foundation/Http/Kernel.html#terminate">terminate</a>($request, $response);
 </code></pre>
 
 

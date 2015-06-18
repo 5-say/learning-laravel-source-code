@@ -118,15 +118,17 @@ class Kernel implements KernelContract {
     <hr id="handle">
     /**
      * Handle an incoming HTTP request.
+     * 处理传入的 HTTP 请求。
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request 请求实例
      * @return \Illuminate\Http\Response
      */
     public function handle($request)
     {
         try
         {
-            $response = $this->sendRequestThroughRouter($request);
+            // 通过中间件或路由发送给定的请求
+            $response = $this-><a href="#sendRequestThroughRouter">sendRequestThroughRouter</a>($request);
         }
         catch (Exception $e)
         {
@@ -135,6 +137,7 @@ class Kernel implements KernelContract {
             $response = $this->renderException($request, $e);
         }
 
+        // 触发 kernel.handled 事件
         $this->app['events']->fire('kernel.handled', [$request, $response]);
 
         return $response;
@@ -143,6 +146,7 @@ class Kernel implements KernelContract {
     <hr id="sendRequestThroughRouter">
     /**
      * Send the given request through the middleware / router.
+     * 通过中间件或路由发送给定的请求。
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -164,6 +168,7 @@ class Kernel implements KernelContract {
     <hr id="terminate">
     /**
      * Call the terminate method on any terminable middleware.
+     * 在所有需要结束的中间件中调用 terminate 方法。
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Http\Response  $response
