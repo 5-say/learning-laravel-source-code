@@ -533,15 +533,18 @@ class Container implements ArrayAccess, ContainerContract {
     <hr id="rebinding">
     /**
      * Bind a new callback to an abstract's rebind event.
+     * 绑定一个新的回调到一个抽象类的 rebind 事件。
      *
-     * @param  string    $abstract
-     * @param  \Closure  $callback
+     * @param  string    $abstract 抽象类
+     * @param  \Closure  $callback 匿名回调
      * @return mixed
      */
     public function rebinding($abstract, Closure $callback)
     {
+        // 存储匿名回调
         $this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract][] = $callback;
 
+        // 返回实现抽象类的实例
         if ($this->bound($abstract)) return $this-><a href="../Foundation/Application.html#make">make</a>($abstract);
     }
 
@@ -593,6 +596,7 @@ class Container implements ArrayAccess, ContainerContract {
     {
         if (isset($this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract]))
         {
+            // 此处的匿名回调是由 $app-><a href="#rebinding">rebinding</a>() 方法进行绑定的
             return $this-><a href="#$reboundCallbacks">reboundCallbacks</a>[$abstract];
         }
 
