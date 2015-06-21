@@ -67,17 +67,18 @@ class Kernel implements KernelContract {
     <hr id="$bootstrappers">
     /**
      * The bootstrap classes for the application.
+     * 应用程序启动时需要引导的类。
      *
      * @var array
      */
     protected $bootstrappers = [
-        'Illuminate\Foundation\Bootstrap\DetectEnvironment',
-        'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-        'Illuminate\Foundation\Bootstrap\ConfigureLogging',
-        'Illuminate\Foundation\Bootstrap\HandleExceptions',
-        'Illuminate\Foundation\Bootstrap\RegisterFacades',
-        'Illuminate\Foundation\Bootstrap\RegisterProviders',
-        'Illuminate\Foundation\Bootstrap\BootProviders',
+        '<a href="../Bootstrap/DetectEnvironment.html#bootstrap">Illuminate\Foundation\Bootstrap\DetectEnvironment</a>', // 运行环境监测
+        '<a href="../Bootstrap/LoadConfiguration.html#bootstrap">Illuminate\Foundation\Bootstrap\LoadConfiguration</a>', // 载入配置文件
+        '<a href="../Bootstrap/ConfigureLogging.html#bootstrap">Illuminate\Foundation\Bootstrap\ConfigureLogging</a>',
+        '<a href="../Bootstrap/HandleExceptions.html#bootstrap">Illuminate\Foundation\Bootstrap\HandleExceptions</a>',
+        '<a href="../Bootstrap/RegisterFacades.html#bootstrap">Illuminate\Foundation\Bootstrap\RegisterFacades</a>',
+        '<a href="../Bootstrap/RegisterProviders.html#bootstrap">Illuminate\Foundation\Bootstrap\RegisterProviders</a>',
+        '<a href="../Bootstrap/BootProviders.html#bootstrap">Illuminate\Foundation\Bootstrap\BootProviders</a>',
     ];
 
     <hr id="$middleware">
@@ -153,11 +154,14 @@ class Kernel implements KernelContract {
      */
     protected function sendRequestThroughRouter($request)
     {
-        $this->app->instance('request', $request);
+        // 在容器中注册共享实例
+        $this->app-><a href="../../Container/Container.html#instance">instance</a>('request', $request);
 
-        Facade::clearResolvedInstance('request');
+        // 清除一个已经解析的 facade 实例
+        Facade::<a href="../../Support/Facades/Facade.html#clearResolvedInstance">clearResolvedInstance</a>('request');
 
-        $this->bootstrap();
+        // 通过 HTTP 请求引导应用程序
+        $this-><a href="#bootstrap">bootstrap</a>();
 
         return (new Pipeline($this->app))
                     ->send($request)
@@ -245,14 +249,17 @@ class Kernel implements KernelContract {
     <hr id="bootstrap">
     /**
      * Bootstrap the application for HTTP requests.
+     * 通过 HTTP 请求引导应用程序。
      *
      * @return void
      */
     public function bootstrap()
     {
-        if ( ! $this->app->hasBeenBootstrapped())
+        // 若应用程序未被引导
+        if ( ! $this->app-><a href="../../Foundation/Application.html#hasBeenBootstrapped">hasBeenBootstrapped</a>())
         {
-            $this->app->bootstrapWith($this->bootstrappers());
+            // 运行各引导类，调用其 bootstrap 方法，并触发“bootstrapping: Xxx”和“bootstrapped: Xxx”事件
+            $this->app-><a href="../../Foundation/Application.html#bootstrapWith">bootstrapWith</a>($this-><a href="#bootstrappers">bootstrappers</a>());
         }
     }
 
@@ -266,7 +273,7 @@ class Kernel implements KernelContract {
     {
         return function($request)
         {
-            $this->app->instance('request', $request);
+            $this->app-><a href="../../Container/Container.html#instance">instance</a>('request', $request);
 
             return $this->router->dispatch($request);
         };
@@ -275,12 +282,13 @@ class Kernel implements KernelContract {
     <hr id="bootstrappers">
     /**
      * Get the bootstrap classes for the application.
+     * 从应用程序中获取引导类。
      *
      * @return array
      */
     protected function bootstrappers()
     {
-        return $this->bootstrappers;
+        return $this-><a href="#$bootstrappers">bootstrappers</a>;
     }
 
     <hr id="reportException">

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../../highlight/src/styles/obsidian.css">
+        <script src="../../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Support/Facades/Facade.php">Illuminate/Support/Facades/Facade.php</a></h2>
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Support\Facades;
+
+use Mockery;
+use RuntimeException;
+use Mockery\MockInterface;
+
+abstract class Facade {
+
+    <hr id="$app">
+    /**
+     * The application instance being facaded.
+     *
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    protected static $app;
+
+    <hr id="$resolvedInstance">
+    /**
+     * The resolved object instances.
+     *
+     * @var array
+     */
+    protected static $resolvedInstance;
+
+    <hr id="swap">
+    /**
+     * Hotswap the underlying instance behind the facade.
+     *
+     * @param  mixed  $instance
+     * @return void
+     */
+    public static function swap($instance)
+    {
+        static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
+
+        static::$app->instance(static::getFacadeAccessor(), $instance);
+    }
+
+    <hr id="shouldReceive">
+    /**
+     * Initiate a mock expectation on the facade.
+     *
+     * @param  mixed
+     * @return \Mockery\Expectation
+     */
+    public static function shouldReceive()
+    {
+        $name = static::getFacadeAccessor();
+
+        if (static::isMock())
+        {
+            $mock = static::$resolvedInstance[$name];
+        }
+        else
+        {
+            $mock = static::createFreshMockInstance($name);
+        }
+
+        return call_user_func_array(array($mock, 'shouldReceive'), func_get_args());
+    }
+
+    <hr id="createFreshMockInstance">
+    /**
+     * Create a fresh mock instance for the given class.
+     *
+     * @param  string  $name
+     * @return \Mockery\Expectation
+     */
+    protected static function createFreshMockInstance($name)
+    {
+        static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
+
+        if (isset(static::$app))
+        {
+            static::$app->instance($name, $mock);
+        }
+
+        return $mock;
+    }
+
+    <hr id="createMockByName">
+    /**
+     * Create a fresh mock instance for the given class.
+     *
+     * @param  string  $name
+     * @return \Mockery\Expectation
+     */
+    protected static function createMockByName($name)
+    {
+        $class = static::getMockableClass($name);
+
+        return $class ? Mockery::mock($class) : Mockery::mock();
+    }
+
+    <hr id="isMock">
+    /**
+     * Determines whether a mock is set as the instance of the facade.
+     *
+     * @return bool
+     */
+    protected static function isMock()
+    {
+        $name = static::getFacadeAccessor();
+
+        return isset(static::$resolvedInstance[$name]) && static::$resolvedInstance[$name] instanceof MockInterface;
+    }
+
+    <hr id="getMockableClass">
+    /**
+     * Get the mockable class for the bound instance.
+     *
+     * @return string
+     */
+    protected static function getMockableClass()
+    {
+        if ($root = static::getFacadeRoot()) return get_class($root);
+    }
+
+    <hr id="getFacadeRoot">
+    /**
+     * Get the root object behind the facade.
+     *
+     * @return mixed
+     */
+    public static function getFacadeRoot()
+    {
+        return static::resolveFacadeInstance(static::getFacadeAccessor());
+    }
+
+    <hr id="getFacadeAccessor">
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    protected static function getFacadeAccessor()
+    {
+        throw new RuntimeException("Facade does not implement getFacadeAccessor method.");
+    }
+
+    <hr id="resolveFacadeInstance">
+    /**
+     * Resolve the facade root instance from the container.
+     *
+     * @param  string  $name
+     * @return mixed
+     */
+    protected static function resolveFacadeInstance($name)
+    {
+        if (is_object($name)) return $name;
+
+        if (isset(static::$resolvedInstance[$name]))
+        {
+            return static::$resolvedInstance[$name];
+        }
+
+        return static::$resolvedInstance[$name] = static::$app[$name];
+    }
+
+    <hr id="clearResolvedInstance">
+    /**
+     * Clear a resolved facade instance.
+     * 清除一个已经解析的 facade 实例。
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public static function clearResolvedInstance($name)
+    {
+        unset(static::$resolvedInstance[$name]);
+    }
+
+    <hr id="clearResolvedInstances">
+    /**
+     * Clear all of the resolved instances.
+     * 清除所有已经解析的实例。
+     *
+     * @return void
+     */
+    public static function clearResolvedInstances()
+    {
+        static::$resolvedInstance = array();
+    }
+
+    <hr id="getFacadeApplication">
+    /**
+     * Get the application instance behind the facade.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application
+     */
+    public static function getFacadeApplication()
+    {
+        return static::$app;
+    }
+
+    <hr id="setFacadeApplication">
+    /**
+     * Set the application instance.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public static function setFacadeApplication($app)
+    {
+        static::$app = $app;
+    }
+
+    /**
+     * Handle dynamic, static calls to the object.
+     *
+     * @param  string  $method
+     * @param  array   $args
+     * @return mixed
+     */
+    public static function __callStatic($method, $args)
+    {
+        $instance = static::getFacadeRoot();
+
+        switch (count($args))
+        {
+            case 0:
+                return $instance->$method();
+
+            case 1:
+                return $instance->$method($args[0]);
+
+            case 2:
+                return $instance->$method($args[0], $args[1]);
+
+            case 3:
+                return $instance->$method($args[0], $args[1], $args[2]);
+
+            case 4:
+                return $instance->$method($args[0], $args[1], $args[2], $args[3]);
+
+            default:
+                return call_user_func_array(array($instance, $method), $args);
+        }
+    }
+
+}
+
+</code></pre>
+
+
+
+
+
+            <script src="../../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>
+

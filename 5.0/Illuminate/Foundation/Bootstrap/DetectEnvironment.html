@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../../highlight/src/styles/obsidian.css">
+        <script src="../../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Foundation/Bootstrap/DetectEnvironment.php">Illuminate/Foundation/Bootstrap/DetectEnvironment.php</a></h2>
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Foundation\Bootstrap;
+
+use Dotenv;
+use InvalidArgumentException;
+use Illuminate\Contracts\Foundation\Application;
+
+class DetectEnvironment {
+
+    <hr id="bootstrap">
+    /**
+     * Bootstrap the given application.
+     * 引导给定的应用程序。
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        try
+        {
+            // 从给定的目录中载入 `.env` 文件
+            Dotenv::<a href="../../../Dotenv.html#load">load</a>($app-><a href="../Application.html#basePath">basePath</a>(), $app-><a href="../Application.html#environmentFile">environmentFile</a>());
+        }
+        catch (InvalidArgumentException $e)
+        {
+            //
+        }
+
+        // 检测应用程序的当前环境
+        $app-><a href="../Application.html#detectEnvironment">detectEnvironment</a>(function()
+        {
+            return env('APP_ENV', 'production');
+        });
+    }
+
+}
+
+</code></pre>
+
+
+
+
+
+            <script src="../../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>
+

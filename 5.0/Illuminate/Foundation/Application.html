@@ -74,6 +74,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$hasBeenBootstrapped">
     /**
      * Indicates if the application has been bootstrapped before.
+     * 指示应用程序在此前是否已经被引导。
      *
      * @var bool
      */
@@ -163,6 +164,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$environmentFile">
     /**
      * The environment file to load during bootstrapping.
+     * 在引导时需要加载的环境文件。
      *
      * @var string
      */
@@ -238,20 +240,25 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="bootstrapWith">
     /**
      * Run the given array of bootstrap classes.
+     * 运行给定数组中的引导类。
      *
      * @param  array  $bootstrappers
      * @return void
      */
     public function bootstrapWith(array $bootstrappers)
     {
+        // 标记应用程序为“已引导”
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper)
         {
+            // 触发“bootstrapping: Xxx”事件
             $this['events']->fire('bootstrapping: '.$bootstrapper, [$this]);
 
+            // 实例化引导类，调用其 bootstrap 方法
             $this->make($bootstrapper)->bootstrap($this);
 
+            // 触发“bootstrapped: Xxx”事件
             $this['events']->fire('bootstrapped: '.$bootstrapper, [$this]);
         }
     }
@@ -299,12 +306,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="hasBeenBootstrapped">
     /**
      * Determine if the application has been bootstrapped before.
+     * 判断应用程序在此前是否已经被引导。
      *
      * @return bool
      */
     public function hasBeenBootstrapped()
     {
-        return $this->hasBeenBootstrapped;
+        return $this-><a href="#$hasBeenBootstrapped">hasBeenBootstrapped</a>;
     }
 
     <hr id="setBasePath">
@@ -477,17 +485,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="environmentFile">
     /**
      * Get the environment file the application is using.
+     * 获取应用程序当前所使用的环境文件。
      *
      * @return string
      */
     public function environmentFile()
     {
-        return $this->environmentFile ?: '.env';
+        return $this-><a href="#$environmentFile">environmentFile</a> ?: '.env';
     }
 
     <hr id="environment">
     /**
      * Get or check the current application environment.
+     * 获取或检测当前应用程序的运行环境。
      *
      * @param  mixed
      * @return string
@@ -526,6 +536,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="detectEnvironment">
     /**
      * Detect the application's current environment.
+     * 检测应用程序的当前环境。
      *
      * @param  \Closure  $callback
      * @return string

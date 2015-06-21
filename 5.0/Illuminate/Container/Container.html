@@ -580,6 +580,8 @@ class Container implements ArrayAccess, ContainerContract {
 
         foreach ($this-><a href="#getReboundCallbacks">getReboundCallbacks</a>($abstract) as $callback)
         {
+            // 实际用例见
+            // <a href="../Auth/AuthServiceProvider.html#registerRequestRebindHandler">Illuminate\Auth\AuthServiceProvider@registerRequestRebindHandler</a>
             <a href="php#call_user_func">call_user_func</a>($callback, $this, $instance);
         }
     }
