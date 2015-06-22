@@ -72,12 +72,19 @@ class Kernel implements KernelContract {
      * @var array
      */
     protected $bootstrappers = [
-        '<a href="../Bootstrap/DetectEnvironment.html#bootstrap">Illuminate\Foundation\Bootstrap\DetectEnvironment</a>', // 运行环境监测
-        '<a href="../Bootstrap/LoadConfiguration.html#bootstrap">Illuminate\Foundation\Bootstrap\LoadConfiguration</a>', // 载入配置文件
+        // 检测运行环境，载入对应的 `.env` 文件
+        '<a href="../Bootstrap/DetectEnvironment.html#bootstrap">Illuminate\Foundation\Bootstrap\DetectEnvironment</a>',
+        // 载入配置项，设置时区、编码
+        '<a href="../Bootstrap/LoadConfiguration.html#bootstrap">Illuminate\Foundation\Bootstrap\LoadConfiguration</a>',
+        // 
         '<a href="../Bootstrap/ConfigureLogging.html#bootstrap">Illuminate\Foundation\Bootstrap\ConfigureLogging</a>',
+        // 
         '<a href="../Bootstrap/HandleExceptions.html#bootstrap">Illuminate\Foundation\Bootstrap\HandleExceptions</a>',
+        // 
         '<a href="../Bootstrap/RegisterFacades.html#bootstrap">Illuminate\Foundation\Bootstrap\RegisterFacades</a>',
+        // 
         '<a href="../Bootstrap/RegisterProviders.html#bootstrap">Illuminate\Foundation\Bootstrap\RegisterProviders</a>',
+        // 
         '<a href="../Bootstrap/BootProviders.html#bootstrap">Illuminate\Foundation\Bootstrap\BootProviders</a>',
     ];
 

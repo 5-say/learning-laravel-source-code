@@ -156,6 +156,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$useStoragePathForOptimizations">
     /**
      * Indicates if the storage directory should be used for optimizations.
+     * 标明 storage 目录是否可用于优化。
      *
      * @var bool
      */
@@ -889,12 +890,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="getCachedConfigPath">
     /**
      * Get the path to the configuration cache file.
+     * 获取配置文件的缓存路径。
      *
      * @return string
      */
     public function getCachedConfigPath()
     {
-        if ($this->vendorIsWritableForOptimizations())
+        if ($this-><a href="#vendorIsWritableForOptimizations">vendorIsWritableForOptimizations</a>())
         {
             return $this-><a href="#$basePath">basePath</a>().'/vendor/config.php';
         }
@@ -923,7 +925,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function getCachedRoutesPath()
     {
-        if ($this->vendorIsWritableForOptimizations())
+        if ($this-><a href="#vendorIsWritableForOptimizations">vendorIsWritableForOptimizations</a>())
         {
             return $this-><a href="#$basePath">basePath</a>().'/vendor/routes.php';
         }
@@ -941,7 +943,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function getCachedCompilePath()
     {
-        if ($this->vendorIsWritableForOptimizations())
+        if ($this-><a href="#vendorIsWritableForOptimizations">vendorIsWritableForOptimizations</a>())
         {
             return $this-><a href="#$basePath">basePath</a>().'/vendor/compiled.php';
         }
@@ -959,7 +961,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function getCachedServicesPath()
     {
-        if ($this->vendorIsWritableForOptimizations())
+        if ($this-><a href="#vendorIsWritableForOptimizations">vendorIsWritableForOptimizations</a>())
         {
             return $this-><a href="#$basePath">basePath</a>().'/vendor/services.json';
         }
@@ -972,26 +974,28 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="vendorIsWritableForOptimizations">
     /**
      * Determine if vendor path is writable.
+     * 判断 vendor 目录是否可写。
      *
      * @return bool
      */
     public function vendorIsWritableForOptimizations()
     {
-        if ($this->useStoragePathForOptimizations) return false;
+        if ($this-><a href="#$useStoragePathForOptimizations">useStoragePathForOptimizations</a>) return false;
 
-        return is_writable($this-><a href="#$basePath">basePath</a>().'/vendor');
+        return <a href="php#is_writable">is_writable</a>($this-><a href="#$basePath">basePath</a>().'/vendor');
     }
 
     <hr id="useStoragePathForOptimizations">
     /**
      * Determines if storage directory should be used for optimizations.
+     * 确定是否为优化使用 storage 目录。
      *
      * @param  bool  $value
      * @return $this
      */
     public function useStoragePathForOptimizations($value = true)
     {
-        $this->useStoragePathForOptimizations = $value;
+        $this-><a href="#$useStoragePathForOptimizations">useStoragePathForOptimizations</a> = $value;
 
         return $this;
     }
