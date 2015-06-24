@@ -604,7 +604,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function register($provider, $options = array(), $force = false)
     {
-        if ($registered = $this->getProvider($provider) && ! $force)
+        // 若存在，则获取已注册的服务提供者实例
+        if ($registered = $this-><a href="#getProvider">getProvider</a>($provider) && ! $force)
         {
             return $registered;
         }
@@ -614,9 +615,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // a more convenient way of specifying your service provider classes.
         if (is_string($provider))
         {
-            $provider = $this->resolveProviderClass($provider);
+            // 解析类名，获得服务提供者实例
+            $provider = $this-><a href="#resolveProviderClass">resolveProviderClass</a>($provider);
         }
 
+        // 调用各服务提供者类的 register 方法
         $provider->register();
 
         // Once we have registered the service we will iterate through the options
@@ -627,13 +630,17 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $this[$key] = $value;
         }
 
-        $this->markAsRegistered($provider);
+        // 标记给定的服务提供者实例为“已注册”。
+        $this-><a href="#markAsRegistered">markAsRegistered</a>($provider);
 
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by the developer's application logics.
+        // 若应用程序已启动
         if ($this-><a href="#$booted">booted</a>)
         {
+            // 启动给定的服务提供者
+            // 调用各服务提供者类的 boot 方法
             $this-><a href="#bootProvider">bootProvider</a>($provider);
         }
 
@@ -643,6 +650,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="getProvider">
     /**
      * Get the registered service provider instance if it exists.
+     * 若存在，则获取已注册的服务提供者实例。
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
      * @return \Illuminate\Support\ServiceProvider|null
@@ -660,6 +668,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="resolveProviderClass">
     /**
      * Resolve a service provider instance from the class name.
+     * 解析一个类名，获得服务提供者实例。
      *
      * @param  string  $provider
      * @return \Illuminate\Support\ServiceProvider
@@ -672,6 +681,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="markAsRegistered">
     /**
      * Mark the given provider as registered.
+     * 标记给定的服务提供者实例为“已注册”。
      *
      * @param  \Illuminate\Support\ServiceProvider
      * @return void
