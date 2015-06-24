@@ -45,14 +45,16 @@ class EventServiceProvider extends ServiceProvider {
     <hr id="register">
     /**
      * Register the service provider.
+     * 注册服务提供者。
      *
      * @return void
      */
     public function register()
     {
-        $this->app->singleton('events', function($app)
+        // 注册 events 单例为 Illuminate\Events\Dispatcher 实例，且设置队列解析器为 Illuminate\Contracts\Queue\Queue
+        $this->app-><a href="../Container/Container.html#singleton">singleton</a>('events', function($app)
         {
-            return (new Dispatcher($app))->setQueueResolver(function() use ($app)
+            return (new Dispatcher($app))-><a href="Dispatcher.html#setQueueResolver">setQueueResolver</a>(function() use ($app)
             {
                 return $app->make('Illuminate\Contracts\Queue\Queue');
             });

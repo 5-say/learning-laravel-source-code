@@ -237,10 +237,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // 统一调用服务提供者父类的 <a href="ServiceProvider.html#__construct">__construct</a>() 方法创建服务提供者实例。
         // 使用 $this-><a href="#register">register</a>(服务提供者实例) 方法进行注册。
 
-        // 事件 Illuminate\Contracts\Queue\Queue
+        // 事件 Illuminate\Events\EventServiceProvider@<a href="../Events/EventServiceProvider.html#register">register</a>
+            // 注册 events 单例为 Illuminate\Events\Dispatcher 实例，且设置队列解析器为 Illuminate\Contracts\Queue\Queue
         $this-><a href="#register">register</a>(new EventServiceProvider($this));
 
-        // 路由 
+        // 路由 Illuminate\Routing\RoutingServiceProvider@<a href="../Routing/RoutingServiceProvider.html#register">register</a>
+            // 
         $this-><a href="#register">register</a>(new RoutingServiceProvider($this));
     }
 
