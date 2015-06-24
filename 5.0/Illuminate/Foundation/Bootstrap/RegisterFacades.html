@@ -36,7 +36,36 @@
 
 
 <pre><code class="php"><!-- <?php -->
-&lt;?php 
+&lt;?php namespace Illuminate\Foundation\Bootstrap;
+
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Contracts\Foundation\Application;
+
+class RegisterFacades {
+
+    <hr id="bootstrap">
+    /**
+     * Bootstrap the given application.
+     * 引导给定的应用程序。
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        // 清除 Facade 中所有已经解析的实例
+        Facade::<a href="../../Support/Facades/Facade.html#clearResolvedInstances">clearResolvedInstances</a>();
+
+        // 为 Facade 设置应用程序实例
+        Facade::<a href="../../Support/Facades/Facade.html#setFacadeApplication">setFacadeApplication</a>($app);
+
+        // 注册别名自动加载
+        AliasLoader::<a href="../AliasLoader.html#getInstance">getInstance</a>($app['config']['app.aliases'])-><a href="../AliasLoader.html#register">register</a>();
+    }
+
+}
+
 </code></pre>
 
 

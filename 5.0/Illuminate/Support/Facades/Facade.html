@@ -47,6 +47,7 @@ abstract class Facade {
     <hr id="$app">
     /**
      * The application instance being facaded.
+     * 应用程序实例。
      *
      * @var \Illuminate\Contracts\Foundation\Application
      */
@@ -55,6 +56,7 @@ abstract class Facade {
     <hr id="$resolvedInstance">
     /**
      * The resolved object instances.
+     * 已解析的对象实例。
      *
      * @var array
      */
@@ -219,7 +221,7 @@ abstract class Facade {
      */
     public static function clearResolvedInstances()
     {
-        static::$resolvedInstance = array();
+        static::<a href="#$resolvedInstance">$resolvedInstance</a> = array();
     }
 
     <hr id="getFacadeApplication">
@@ -236,6 +238,7 @@ abstract class Facade {
     <hr id="setFacadeApplication">
     /**
      * Set the application instance.
+     * 设置应用程序实例。
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
@@ -245,6 +248,7 @@ abstract class Facade {
         static::$app = $app;
     }
 
+    <hr id="__callStatic">
     /**
      * Handle dynamic, static calls to the object.
      *

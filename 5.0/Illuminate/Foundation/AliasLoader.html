@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Foundation/AliasLoader.php">Illuminate/Foundation/AliasLoader.php</a></h2>
+
+
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Foundation;
+
+class AliasLoader {
+
+    <hr id="$aliases">
+    /**
+     * The array of class aliases.
+     * 别名数组。
+     *
+     * @var array
+     */
+    protected $aliases;
+
+    <hr id="$registered">
+    /**
+     * Indicates if a loader has been registered.
+     * 标记当前类是否已被注册。
+     *
+     * @var bool
+     */
+    protected $registered = false;
+
+    <hr id="$instance">
+    /**
+     * The singleton instance of the loader.
+     * 当前类的单例实例。
+     *
+     * @var \Illuminate\Foundation\AliasLoader
+     */
+    protected static $instance;
+
+    <hr id="__construct">
+    /**
+     * Create a new AliasLoader instance.
+     * 创建一个新的 AliasLoader 实例。
+     *
+     * @param  array  $aliases
+     */
+    private function __construct($aliases)
+    {
+        $this-><a href="#$aliases">aliases</a> = $aliases;
+    }
+
+    <hr id="getInstance">
+    /**
+     * Get or create the singleton alias loader instance.
+     * 获取或创建一个 AliasLoader 单例。
+     *
+     * @param  array  $aliases
+     * @return \Illuminate\Foundation\AliasLoader
+     */
+    public static function getInstance(array $aliases = array())
+    {
+        // 首次调用直接返回当前类实例
+        if (is_null(static::<a href="#$instance">$instance</a>)) return static::<a href="#$instance">$instance</a> = <a href="#__construct">new static</a>($aliases);
+
+        # 之后的调用中，合并存储传入的 aliases 数组，并返回此类单例
+
+        $aliases = <a href="php#array_merge">array_merge</a>(static::<a href="#$instance">$instance</a>-><a href="#getAliases">getAliases</a>(), $aliases);
+
+        static::<a href="#$instance">$instance</a>-><a href="#setAliases">setAliases</a>($aliases);
+
+        return static::<a href="#$instance">$instance</a>;
+    }
+
+    <hr id="load">
+    /**
+     * Load a class alias if it is registered.
+     *
+     * @param  string  $alias
+     * @return void
+     */
+    public function load($alias)
+    {
+        if (isset($this-><a href="#$aliases">aliases</a>[$alias]))
+        {
+            return class_alias($this-><a href="#$aliases">aliases</a>[$alias], $alias);
+        }
+    }
+
+    <hr id="alias">
+    /**
+     * Add an alias to the loader.
+     *
+     * @param  string  $class
+     * @param  string  $alias
+     * @return void
+     */
+    public function alias($class, $alias)
+    {
+        $this-><a href="#$aliases">aliases</a>[$class] = $alias;
+    }
+
+    <hr id="register">
+    /**
+     * Register the loader on the auto-loader stack.
+     * 注册自动加载。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        if ( ! $this-><a href="#$registered">registered</a>)
+        {
+            // 注册自动加载
+            $this-><a href="#prependToLoaderStack">prependToLoaderStack</a>();
+
+            // 标记为已注册
+            $this-><a href="#$registered">registered</a> = true;
+        }
+    }
+
+    <hr id="prependToLoaderStack">
+    /**
+     * Prepend the load method to the auto-loader stack.
+     * 注册制动加载。
+     *
+     * @return void
+     */
+    protected function prependToLoaderStack()
+    {
+        <a href="php#spl_autoload_register">spl_autoload_register</a>(array($this, 'load'), true, true);
+    }
+
+    <hr id="getAliases">
+    /**
+     * Get the registered aliases.
+     * 获取已注册的别名数组。
+     *
+     * @return array
+     */
+    public function getAliases()
+    {
+        return $this-><a href="#$aliases">aliases</a>;
+    }
+
+    <hr id="setAliases">
+    /**
+     * Set the registered aliases.
+     * 设置已注册的别名。
+     *
+     * @param  array  $aliases
+     * @return void
+     */
+    public function setAliases(array $aliases)
+    {
+        $this-><a href="#$aliases">aliases</a> = $aliases;
+    }
+
+    <hr id="isRegistered">
+    /**
+     * Indicates if the loader has been registered.
+     *
+     * @return bool
+     */
+    public function isRegistered()
+    {
+        return $this-><a href="#$registered">registered</a>;
+    }
+
+    <hr id="setRegistered">
+    /**
+     * Set the "registered" state of the loader.
+     *
+     * @param  bool  $value
+     * @return void
+     */
+    public function setRegistered($value)
+    {
+        $this-><a href="#$registered">registered</a> = $value;
+    }
+
+    <hr id="setInstance">
+    /**
+     * Set the value of the singleton alias loader.
+     *
+     * @param  \Illuminate\Foundation\AliasLoader  $loader
+     * @return void
+     */
+    public static function setInstance($loader)
+    {
+        static::<a href="#$instance">$instance</a> = $loader;
+    }
+
+    <hr id="__clone">
+    /**
+     * Clone method.
+     *
+     * @return void
+     */
+    private function __clone()
+    {
+        //
+    }
+
+}
+
+</code></pre>
+
+
+
+
+
+
+            <script src="../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>
+

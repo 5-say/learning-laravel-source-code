@@ -83,6 +83,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$booted">
     /**
      * Indicates if the application has "booted".
+     * 应用程序启动标记。
      *
      * @var bool
      */
@@ -91,6 +92,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$bootingCallbacks">
     /**
      * The array of booting callbacks.
+     * 存储 booting 回调的数组。
      *
      * @var array
      */
@@ -99,6 +101,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$bootedCallbacks">
     /**
      * The array of booted callbacks.
+     * 存储 booted 回调的数组。
      *
      * @var array
      */
@@ -107,6 +110,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$terminatingCallbacks">
     /**
      * The array of terminating callbacks.
+     * 存储 terminating 回调的数组。
      *
      * @var array
      */
@@ -115,6 +119,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$serviceProviders">
     /**
      * All of the registered service providers.
+     * 所有已注册的服务提供者。
      *
      * @var array
      */
@@ -123,6 +128,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="$loadedProviders">
     /**
      * The names of the loaded service providers.
+     * 所有已加载的服务提供者。
      *
      * @var array
      */
@@ -574,6 +580,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="registerConfiguredProviders">
     /**
      * Register all of the configured providers.
+     * 注册 providers 配置项中的所有服务提供者。
      *
      * @return void
      */
@@ -625,9 +632,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by the developer's application logics.
-        if ($this->booted)
+        if ($this-><a href="#$booted">booted</a>)
         {
-            $this->bootProvider($provider);
+            $this-><a href="#bootProvider">bootProvider</a>($provider);
         }
 
         return $provider;
@@ -644,7 +651,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $name = is_string($provider) ? $provider : get_class($provider);
 
-        return array_first($this->serviceProviders, function($key, $value) use ($name)
+        return array_first($this-><a href="#$serviceProviders">serviceProviders</a>, function($key, $value) use ($name)
         {
             return $value instanceof $name;
         });
@@ -673,7 +680,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this['events']->fire($class = get_class($provider), array($provider));
 
-        $this->serviceProviders[] = $provider;
+        $this-><a href="#$serviceProviders">serviceProviders</a>[] = $provider;
 
         $this->loadedProviders[$class] = true;
     }
@@ -739,11 +746,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $this-><a href="#register">register</a>($instance = new $provider($this));
 
-        if ( ! $this->booted)
+        if ( ! $this-><a href="#$booted">booted</a>)
         {
             $this->booting(function() use ($instance)
             {
-                $this->bootProvider($instance);
+                $this-><a href="#bootProvider">bootProvider</a>($instance);
             });
         }
     }
@@ -799,45 +806,54 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function isBooted()
     {
-        return $this->booted;
+        return $this-><a href="#$booted">booted</a>;
     }
 
     <hr id="boot">
     /**
      * Boot the application's service providers.
+     * 启动应用程序的服务提供者。
      *
      * @return void
      */
     public function boot()
     {
-        if ($this->booted) return;
+        // 防止重复启动
+        if ($this-><a href="#$booted">booted</a>) return;
 
         // Once the application has booted we will also fire some "booted" callbacks
         // for any listeners that need to do work after this initial booting gets
         // finished. This is useful when ordering the boot-up processes we run.
-        $this->fireAppCallbacks($this->bootingCallbacks);
+        // 触发已绑定的 booting 回调
+        $this-><a href="#fireAppCallbacks">fireAppCallbacks</a>($this-><a href="#$bootingCallbacks">bootingCallbacks</a>);
 
-        array_walk($this->serviceProviders, function($p) {
-            $this->bootProvider($p);
+        <a href="php#array_walk">array_walk</a>($this-><a href="#$serviceProviders">serviceProviders</a>, function($p) {
+            // 循环调用各服务提供者的 bootProvider 方法
+            $this-><a href="#bootProvider">bootProvider</a>($p);
         });
 
-        $this->booted = true;
+        // 标记为已启动
+        $this-><a href="#$booted">booted</a> = true;
 
-        $this->fireAppCallbacks($this->bootedCallbacks);
+        // 触发已绑定的 booted 回调
+        $this-><a href="#fireAppCallbacks">fireAppCallbacks</a>($this-><a href="#$bootedCallbacks">bootedCallbacks</a>);
     }
 
     <hr id="bootProvider">
     /**
      * Boot the given service provider.
+     * 启动给定的服务提供者。
      *
      * @param  \Illuminate\Support\ServiceProvider  $provider
      * @return void
      */
     protected function bootProvider(ServiceProvider $provider)
     {
-        if (method_exists($provider, 'boot'))
+        // 若存在 boot 方法
+        if (<a href="php#method_exists">method_exists</a>($provider, 'boot'))
         {
-            return $this->call([$provider, 'boot']);
+            // 调用对应的 boot 方法
+            return $this-><a href="../Container/Container.html#call">call</a>([$provider, 'boot']);
         }
     }
 
@@ -850,7 +866,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function booting($callback)
     {
-        $this->bootingCallbacks[] = $callback;
+        $this-><a href="#$bootingCallbacks">bootingCallbacks</a>[] = $callback;
     }
 
     <hr id="booted">
@@ -862,9 +878,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function booted($callback)
     {
-        $this->bootedCallbacks[] = $callback;
+        $this-><a href="#$booted">booted</a>Callbacks[] = $callback;
 
-        if ($this->isBooted()) $this->fireAppCallbacks(array($callback));
+        if ($this->isBooted()) $this-><a href="#fireAppCallbacks">fireAppCallbacks</a>(array($callback));
     }
 
     <hr id="handle">
@@ -1003,6 +1019,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     <hr id="fireAppCallbacks">
     /**
      * Call the booting callbacks for the application.
+     * 触发应用程序的 booting 回调。
      *
      * @param  array  $callbacks
      * @return void
@@ -1011,7 +1028,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         foreach ($callbacks as $callback)
         {
-            call_user_func($callback, $this);
+            <a href="php#call_user_func">call_user_func</a>($callback, $this);
         }
     }
 
@@ -1083,7 +1100,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         foreach ($this->terminatingCallbacks as $terminating)
         {
-            $this->call($terminating);
+            $this-><a href="../Container/Container.html#call">call</a>($terminating);
         }
     }
 

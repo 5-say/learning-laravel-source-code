@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Log/Writer.php">Illuminate/Log/Writer.php</a></h2>
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Log;
+
+use Closure;
+use RuntimeException;
+use InvalidArgumentException;
+use Monolog\Handler\SyslogHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger as MonologLogger;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Support\Arrayable;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Illuminate\Contracts\Logging\Log as LogContract;
+
+class Writer implements LogContract, PsrLoggerInterface {
+
+    <hr id="$monolog">
+    /**
+     * The Monolog logger instance.
+     *
+     * @var \Monolog\Logger
+     */
+    protected $monolog;
+
+    <hr id="$dispatcher">
+    /**
+     * The event dispatcher instance.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher
+     */
+    protected $dispatcher;
+
+    <hr id="$levels">
+    /**
+     * The Log levels.
+     *
+     * @var array
+     */
+    protected $levels = [
+        'debug'     => MonologLogger::DEBUG,
+        'info'      => MonologLogger::INFO,
+        'notice'    => MonologLogger::NOTICE,
+        'warning'   => MonologLogger::WARNING,
+        'error'     => MonologLogger::ERROR,
+        'critical'  => MonologLogger::CRITICAL,
+        'alert'     => MonologLogger::ALERT,
+        'emergency' => MonologLogger::EMERGENCY,
+    ];
+
+    <hr id="__construct">
+    /**
+     * Create a new log writer instance.
+     *
+     * @param  \Monolog\Logger  $monolog
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @return void
+     */
+    public function __construct(MonologLogger $monolog, Dispatcher $dispatcher = null)
+    {
+        $this->monolog = $monolog;
+
+        if (isset($dispatcher))
+        {
+            $this->dispatcher = $dispatcher;
+        }
+    }
+
+    <hr id="emergency">
+    /**
+     * Log an emergency message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function emergency($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="alert">
+    /**
+     * Log an alert message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function alert($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="critical">
+    /**
+     * Log a critical message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function critical($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="error">
+    /**
+     * Log an error message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function error($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="warning">
+    /**
+     * Log a warning message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function warning($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="notice">
+    /**
+     * Log a notice to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function notice($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="info">
+    /**
+     * Log an informational message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function info($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="debug">
+    /**
+     * Log a debug message to the logs.
+     *
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function debug($message, array $context = array())
+    {
+        return $this->writeLog(__FUNCTION__, $message, $context);
+    }
+
+    <hr id="log">
+    /**
+     * Log a message to the logs.
+     *
+     * @param  string  $level
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function log($level, $message, array $context = array())
+    {
+        return $this->writeLog($level, $message, $context);
+    }
+
+    <hr id="write">
+    /**
+     * Dynamically pass log calls into the writer.
+     *
+     * @param  string  $level
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    public function write($level, $message, array $context = array())
+    {
+        return $this->writeLog($level, $message, $context);
+    }
+
+    <hr id="writeLog">
+    /**
+     * Write a message to Monolog.
+     *
+     * @param  string  $level
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    protected function writeLog($level, $message, $context)
+    {
+        $this->fireLogEvent($level, $message = $this->formatMessage($message), $context);
+
+        $this->monolog->{$level}($message, $context);
+    }
+
+    <hr id="useFiles">
+    /**
+     * Register a file log handler.
+     * 单文件日志处理。
+     *
+     * @param  string  $path
+     * @param  string  $level
+     * @return void
+     */
+    public function useFiles($path, $level = 'debug')
+    {
+        $this->monolog->pushHandler($handler = new StreamHandler($path, $this->parseLevel($level)));
+
+        $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    <hr id="useDailyFiles">
+    /**
+     * Register a daily file log handler.
+     * 每日记录，允许通过 app.log_max_files 设置“最大日志保存天数”（默认 5 天）。
+     *
+     * @param  string  $path
+     * @param  int     $days
+     * @param  string  $level
+     * @return void
+     */
+    public function useDailyFiles($path, $days = 0, $level = 'debug')
+    {
+        $this->monolog->pushHandler(
+            $handler = new RotatingFileHandler($path, $days, $this->parseLevel($level))
+        );
+
+        $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    <hr id="useSyslog">
+    /**
+     * Register a Syslog handler.
+     * 并入系统日志，并将标识符设置为 laravel。
+     *
+     * @param  string  $name
+     * @param  string  $level
+     * @return void
+     */
+    public function useSyslog($name = 'laravel', $level = 'debug')
+    {
+        return $this->monolog->pushHandler(new SyslogHandler($name, LOG_USER, $level));
+    }
+
+    <hr id="useErrorLog">
+    /**
+     * Register an error_log handler.
+     * 并入系统错误日志。
+     *
+     * @param  string  $level
+     * @param  int  $messageType
+     * @return void
+     */
+    public function useErrorLog($level = 'debug', $messageType = ErrorLogHandler::OPERATING_SYSTEM)
+    {
+        $this->monolog->pushHandler(
+            $handler = new ErrorLogHandler($messageType, $this->parseLevel($level))
+        );
+
+        $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    <hr id="listen">
+    /**
+     * Register a new callback handler for when a log event is triggered.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     *
+     * @throws \RuntimeException
+     */
+    public function listen(Closure $callback)
+    {
+        if ( ! isset($this->dispatcher))
+        {
+            throw new RuntimeException("Events dispatcher has not been set.");
+        }
+
+        $this->dispatcher->listen('illuminate.log', $callback);
+    }
+
+    <hr id="fireLogEvent">
+    /**
+     * Fires a log event.
+     *
+     * @param  string  $level
+     * @param  string  $message
+     * @param  array   $context
+     * @return void
+     */
+    protected function fireLogEvent($level, $message, array $context = array())
+    {
+        // If the event dispatcher is set, we will pass along the parameters to the
+        // log listeners. These are useful for building profilers or other tools
+        // that aggregate all of the log messages for a given "request" cycle.
+        if (isset($this->dispatcher))
+        {
+            $this->dispatcher->fire('illuminate.log', compact('level', 'message', 'context'));
+        }
+    }
+
+    <hr id="formatMessage">
+    /**
+     * Format the parameters for the logger.
+     *
+     * @param  mixed  $message
+     * @return void
+     */
+    protected function formatMessage($message)
+    {
+        if (is_array($message))
+        {
+            return var_export($message, true);
+        }
+        elseif ($message instanceof Jsonable)
+        {
+            return $message->toJson();
+        }
+        elseif ($message instanceof Arrayable)
+        {
+            return var_export($message->toArray(), true);
+        }
+
+        return $message;
+    }
+
+    <hr id="parseLevel">
+    /**
+     * Parse the string level into a Monolog constant.
+     *
+     * @param  string  $level
+     * @return int
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function parseLevel($level)
+    {
+        if (isset($this->levels[$level]))
+        {
+            return $this->levels[$level];
+        }
+
+        throw new InvalidArgumentException("Invalid log level.");
+    }
+
+    <hr id="getMonolog">
+    /**
+     * Get the underlying Monolog instance.
+     * 获取 Monolog 实例。
+     *
+     * @return \Monolog\Logger
+     */
+    public function getMonolog()
+    {
+        return $this->monolog;
+    }
+
+    <hr id="getDefaultFormatter">
+    /**
+     * Get a defaut Monolog formatter instance.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected function getDefaultFormatter()
+    {
+        return new LineFormatter(null, null, true, true);
+    }
+
+    <hr id="getEventDispatcher">
+    /**
+     * Get the event dispatcher instance.
+     *
+     * @return \Illuminate\Contracts\Events\Dispatcher
+     */
+    public function getEventDispatcher()
+    {
+        return $this->dispatcher;
+    }
+
+    <hr id="setEventDispatcher">
+    /**
+     * Set the event dispatcher instance.
+     *
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @return void
+     */
+    public function setEventDispatcher(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
+}
+
+
+</code></pre>
+
+
+
+
+
+            <script src="../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>

@@ -36,7 +36,28 @@
 
 
 <pre><code class="php"><!-- <?php -->
-&lt;?php 
+&lt;?php namespace Illuminate\Foundation\Bootstrap;
+
+use Illuminate\Contracts\Foundation\Application;
+
+class BootProviders {
+
+    <hr id="bootstrap">
+    /**
+     * Bootstrap the given application.
+     * 引导给定的应用程序。
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        // 启动应用程序的服务提供者
+        $app-><a href="../Application.html#boot">boot</a>();
+    }
+
+}
+
 </code></pre>
 
 

@@ -36,7 +36,28 @@
 
 
 <pre><code class="php"><!-- <?php -->
-&lt;?php 
+&lt;?php namespace Illuminate\Foundation\Bootstrap;
+
+use Illuminate\Contracts\Foundation\Application;
+
+class RegisterProviders {
+
+    <hr id="bootstrap">
+    /**
+     * Bootstrap the given application.
+     * 引导给定的应用程序。
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        // 注册 providers 配置项中的所有服务提供者
+        $app-><a href="../Application.html#registerConfiguredProviders">registerConfiguredProviders</a>();
+    }
+
+}
+
 </code></pre>
 
 
