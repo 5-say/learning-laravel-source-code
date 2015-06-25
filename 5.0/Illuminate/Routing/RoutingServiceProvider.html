@@ -51,24 +51,29 @@ class RoutingServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->registerRouter();          // 注册路由实例
+        // 注册路由实例 Illuminate\Routing\Router
+        $this-><a href="#registerRouter">registerRouter</a>();
 
-        $this->registerUrlGenerator();    // 注册 Url 生成器实例
+        // 注册 Url 生成器实例 Illuminate\Routing\UrlGenerator
+        $this-><a href="#registerUrlGenerator">registerUrlGenerator</a>();
 
-        $this->registerRedirector();      // 注册 Redirector（跳转）实例
+        // 注册 Redirector（跳转）实例 Illuminate\Routing\Redirector
+        $this-><a href="#registerRedirector">registerRedirector</a>();
 
-        $this->registerResponseFactory(); // 注册 Response（响应）实例
+        // 注册 Response（响应）实例 Illuminate\Routing\ResponseFactory
+        $this-><a href="#registerResponseFactory">registerResponseFactory</a>();
     }
 
     <hr id="registerRouter">
     /**
      * Register the router instance.
+     * 注册路由实例。
      *
      * @return void
      */
     protected function registerRouter()
     {
-        $this->app['router'] = $this->app->share(function($app)
+        $this->app['router'] = $this->app-><a href="../Container/Container.html#share">share</a>(function($app)
         {
             return new Router($app['events'], $app);
         });
@@ -77,12 +82,13 @@ class RoutingServiceProvider extends ServiceProvider {
     <hr id="registerUrlGenerator">
     /**
      * Register the URL generator service.
+     * 注册 Url 生成器实例。
      *
      * @return void
      */
     protected function registerUrlGenerator()
     {
-        $this->app['url'] = $this->app->share(function($app)
+        $this->app['url'] = $this->app-><a href="../Container/Container.html#share">share</a>(function($app)
         {
             $routes = $app['router']->getRoutes();
 
@@ -131,12 +137,13 @@ class RoutingServiceProvider extends ServiceProvider {
     <hr id="registerRedirector">
     /**
      * Register the Redirector service.
+     * 注册 Redirector（跳转）服务。
      *
      * @return void
      */
     protected function registerRedirector()
     {
-        $this->app['redirect'] = $this->app->share(function($app)
+        $this->app['redirect'] = $this->app-><a href="../Container/Container.html#share">share</a>(function($app)
         {
             $redirector = new Redirector($app['url']);
 
@@ -155,6 +162,7 @@ class RoutingServiceProvider extends ServiceProvider {
     <hr id="registerResponseFactory">
     /**
      * Register the response factory implementation.
+     * 注册 Response（响应）实例。
      *
      * @return void
      */

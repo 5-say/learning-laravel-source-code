@@ -155,6 +155,7 @@ class Response
      */
     protected $charset;
 
+    <hr id="$statusTexts">
     /**
      * Status codes translation table.
      *
@@ -229,6 +230,7 @@ class Response
         511 => 'Network Authentication Required',                             // RFC6585
     );
 
+    <hr id="__construct">
     /**
      * Constructor.
      *
@@ -251,6 +253,7 @@ class Response
         }
     }
 
+    <hr id="create">
     /**
      * Factory method for chainability.
      *
@@ -436,6 +439,7 @@ class Response
         return $this;
     }
 
+    <hr id="setContent">
     /**
      * Sets the response content.
      *
@@ -586,6 +590,7 @@ class Response
         return $this->charset;
     }
 
+    <hr id="isCacheable">
     /**
      * Returns true if the response is worth caching under any circumstance.
      *
@@ -612,6 +617,7 @@ class Response
         return $this->isValidateable() || $this->isFresh();
     }
 
+    <hr id="isFresh">
     /**
      * Returns true if the response is "fresh".
      *
@@ -628,6 +634,7 @@ class Response
         return $this->getTtl() > 0;
     }
 
+    <hr id="isValidateable">
     /**
      * Returns true if the response includes headers that can be used to validate
      * the response with the origin server using a conditional GET request.
@@ -677,6 +684,7 @@ class Response
         return $this;
     }
 
+    <hr id="mustRevalidate">
     /**
      * Returns true if the response must be revalidated by caches.
      *
@@ -802,6 +810,7 @@ class Response
         return $this;
     }
 
+    <hr id="getMaxAge">
     /**
      * Returns the number of seconds after the time specified in the response's Date
      * header when the response should no longer be considered fresh.
@@ -828,6 +837,7 @@ class Response
         }
     }
 
+    <hr id="setMaxAge">
     /**
      * Sets the number of seconds after which the response should no longer be considered fresh.
      *
@@ -846,6 +856,7 @@ class Response
         return $this;
     }
 
+    <hr id="setSharedMaxAge">
     /**
      * Sets the number of seconds after which the response should no longer be considered fresh by shared caches.
      *
@@ -865,6 +876,7 @@ class Response
         return $this;
     }
 
+    <hr id="getTtl">
     /**
      * Returns the response's time-to-live in seconds.
      *
@@ -884,6 +896,7 @@ class Response
         }
     }
 
+    <hr id="setTtl">
     /**
      * Sets the response's time-to-live for shared caches.
      *
@@ -902,6 +915,7 @@ class Response
         return $this;
     }
 
+    <hr id="setClientTtl">
     /**
      * Sets the response's time-to-live for private/client caches.
      *
@@ -920,6 +934,7 @@ class Response
         return $this;
     }
 
+    <hr id="getLastModified">
     /**
      * Returns the Last-Modified HTTP header as a DateTime instance.
      *
@@ -934,6 +949,7 @@ class Response
         return $this->headers->getDate('Last-Modified');
     }
 
+    <hr id="setLastModified">
     /**
      * Sets the Last-Modified HTTP header with a DateTime instance.
      *
@@ -997,6 +1013,7 @@ class Response
         return $this;
     }
 
+    <hr id="setCache">
     /**
      * Sets the response's cache headers (validation and/or expiration).
      *
@@ -1051,6 +1068,7 @@ class Response
         return $this;
     }
 
+    <hr id="setNotModified">
     /**
      * Modifies the response so that it conforms to the rules defined for a 304 status code.
      *
@@ -1076,6 +1094,7 @@ class Response
         return $this;
     }
 
+    <hr id="hasVary">
     /**
      * Returns true if the response includes a Vary header.
      *
@@ -1128,6 +1147,7 @@ class Response
         return $this;
     }
 
+    <hr id="isNotModified">
     /**
      * Determines if the Response validators (ETag, Last-Modified) match
      * a conditional value specified in the Request.
@@ -1166,6 +1186,7 @@ class Response
         return $notModified;
     }
 
+    <hr id="isInvalid">
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     /**
      * Is response invalid?
@@ -1179,6 +1200,7 @@ class Response
         return $this->statusCode < 100 || $this->statusCode >= 600;
     }
 
+    <hr id="isInformational">
     /**
      * Is response informative?
      *
@@ -1191,6 +1213,7 @@ class Response
         return $this->statusCode >= 100 && $this->statusCode < 200;
     }
 
+    <hr id="isSuccessful">
     /**
      * Is response successful?
      *
@@ -1203,6 +1226,7 @@ class Response
         return $this->statusCode >= 200 && $this->statusCode < 300;
     }
 
+    <hr id="isRedirection">
     /**
      * Is the response a redirect?
      *
@@ -1215,6 +1239,7 @@ class Response
         return $this->statusCode >= 300 && $this->statusCode < 400;
     }
 
+    <hr id="isClientError">
     /**
      * Is there a client error?
      *
@@ -1227,6 +1252,7 @@ class Response
         return $this->statusCode >= 400 && $this->statusCode < 500;
     }
 
+    <hr id="isServerError">
     /**
      * Was there a server side error?
      *
@@ -1239,6 +1265,7 @@ class Response
         return $this->statusCode >= 500 && $this->statusCode < 600;
     }
 
+    <hr id="isOk">
     /**
      * Is the response OK?
      *
@@ -1251,6 +1278,7 @@ class Response
         return 200 === $this->statusCode;
     }
 
+    <hr id="isForbidden">
     /**
      * Is the response forbidden?
      *
@@ -1263,6 +1291,7 @@ class Response
         return 403 === $this->statusCode;
     }
 
+    <hr id="isNotFound">
     /**
      * Is the response a not found error?
      *
@@ -1275,6 +1304,7 @@ class Response
         return 404 === $this->statusCode;
     }
 
+    <hr id="isRedirect">
     /**
      * Is the response a redirect of some form?
      *
@@ -1289,6 +1319,7 @@ class Response
         return in_array($this->statusCode, array(201, 301, 302, 303, 307, 308)) && (null === $location ?: $location == $this->headers->get('Location'));
     }
 
+    <hr id="isEmpty">
     /**
      * Is the response empty?
      *
@@ -1301,6 +1332,7 @@ class Response
         return in_array($this->statusCode, array(204, 304));
     }
 
+    <hr id="closeOutputBuffers">
     /**
      * Cleans or flushes output buffers up to target level.
      *
@@ -1330,6 +1362,7 @@ class Response
         }
     }
 
+    <hr id="ensureIEOverSSLCompatibility">
     /**
      * Checks if we need to remove Cache-Control for SSL encrypted downloads when using IE < 9.
      *

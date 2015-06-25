@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Learning-laravel-source-code by 5-say</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/normalize.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../../stylesheets/github-light.css" media="screen">
+        <style>
+            .l2 { margin-left: 2em; }
+            .l3 { margin-left: 4em; }
+            .l4 { margin-left: 6em; }
+            pre a { border-bottom: dotted 2px #9FCCFC; }
+            pre a:hover span { color: #6AB0F7; }
+        </style>
+        <link rel="stylesheet" href="../../../highlight/src/styles/obsidian.css">
+        <script src="../../../highlight/src/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script src="../../../highlight/src/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <section class="page-header" style="padding: 0;">
+            <h1 class="project-name">Learning-laravel-source-code</h1>
+            <h2 class="project-tagline">Laravel 注释翻译、源码学习、完整包。</h2>
+            <a href="../../../index.html" class="btn">回到首页</a>
+            <a href="index.html" class="btn">入口文件</a>
+            <a href="https://github.com/5-say/learning-laravel-source-code/issues/new" class="btn" target="_blank">问题反馈</a>
+        </section>
+
+        <section class="main-content">
+
+            <h2><a href="@Illuminate/Pipeline/Pipeline.php">Illuminate/Pipeline/Pipeline.php</a></h2>
+
+
+
+
+<pre><code class="php"><!-- <?php -->
+&lt;?php namespace Illuminate\Pipeline;
+
+use Closure;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
+
+class Pipeline implements PipelineContract {
+
+    <hr id="$container">
+    /**
+     * The container implementation.
+     *
+     * @var \Illuminate\Contracts\Container\Container
+     */
+    protected $container;
+
+    <hr id="$passable">
+    /**
+     * The object being passed through the pipeline.
+     *
+     * @var mixed
+     */
+    protected $passable;
+
+    <hr id="$pipes">
+    /**
+     * The array of class pipes.
+     *
+     * @var array
+     */
+    protected $pipes = array();
+
+    <hr id="$method">
+    /**
+     * The method to call on each pipe.
+     *
+     * @var string
+     */
+    protected $method = 'handle';
+
+    <hr id="__construct">
+    /**
+     * Create a new class instance.
+     *
+     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @return void
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    <hr id="send">
+    /**
+     * Set the object being sent through the pipeline.
+     *
+     * @param  mixed  $passable
+     * @return $this
+     */
+    public function send($passable)
+    {
+        $this->passable = $passable;
+
+        return $this;
+    }
+
+    <hr id="through">
+    /**
+     * Set the array of pipes.
+     * 设置管道数组。
+     *
+     * @param  dynamic|array  $pipes
+     * @return $this
+     */
+    public function through($pipes)
+    {
+        $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+
+        return $this;
+    }
+
+    <hr id="via">
+    /**
+     * Set the method to call on the pipes.
+     *
+     * @param  string  $method
+     * @return $this
+     */
+    public function via($method)
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    <hr id="then">
+    /**
+     * Run the pipeline with a final destination callback.
+     * 通过最终回调运行管道。
+     *
+     * @param  \Closure  $destination
+     * @return mixed
+     */
+    public function then(Closure $destination)
+    {
+        $firstSlice = $this->getInitialSlice($destination);
+
+        $pipes = <a href="php#array_reverse">array_reverse</a>($this->pipes);
+
+        return <a href="php#call_user_func">call_user_func</a>(
+            <a href="php#array_reduce">array_reduce</a>($pipes, $this->getSlice(), $firstSlice), $this->passable
+        );
+    }
+
+    <hr id="getSlice">
+    /**
+     * Get a Closure that represents a slice of the application onion.
+     *
+     * @return \Closure
+     */
+    protected function getSlice()
+    {
+        return function($stack, $pipe)
+        {
+            return function($passable) use ($stack, $pipe)
+            {
+                // If the pipe is an instance of a Closure, we will just call it directly but
+                // otherwise we'll resolve the pipes out of the container and call it with
+                // the appropriate method and arguments, returning the results back out.
+                if ($pipe instanceof Closure)
+                {
+                    return <a href="php#call_user_func">call_user_func</a>($pipe, $passable, $stack);
+                }
+                else
+                {
+                    return $this->container->make($pipe)
+                            ->{$this->method}($passable, $stack);
+                }
+            };
+        };
+    }
+
+    <hr id="getInitialSlice">
+    /**
+     * Get the initial slice to begin the stack call.
+     *
+     * @param  \Closure  $destination
+     * @return \Closure
+     */
+    protected function getInitialSlice(Closure $destination)
+    {
+        return function($passable) use ($destination)
+        {
+            return <a href="php#call_user_func">call_user_func</a>($destination, $passable);
+        };
+    }
+
+}
+
+</code></pre>
+
+
+
+
+
+            <script src="../../main.js"></script>
+
+        </section>
+
+
+
+    
+    </body>
+</html>
+

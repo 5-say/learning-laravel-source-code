@@ -187,13 +187,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function __construct($basePath = null)
     {
-        $this-><a href="#registerBaseBindings">registerBaseBindings</a>(); // 注册基础绑定
+        // 注册基础绑定
+        $this-><a href="#registerBaseBindings">registerBaseBindings</a>();
 
-        $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>(); // 注册所有的基础服务提供者
+        // 注册所有的基础服务提供者
+            // 事件 Illuminate\Events\EventServiceProvider@register
+            // 路由 Illuminate\Routing\RoutingServiceProvider@register
+        $this-><a href="#registerBaseServiceProviders">registerBaseServiceProviders</a>();
 
-        $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>(); // 注册核心类别名
+        // 注册核心类别名
+        $this-><a href="#registerCoreContainerAliases">registerCoreContainerAliases</a>();
 
-        if ($basePath) $this-><a href="#setBasePath">setBasePath</a>($basePath); // 设置基础路径
+        // 设置基础路径
+        if ($basePath) $this-><a href="#setBasePath">setBasePath</a>($basePath);
     }
 
     <hr id="version">
@@ -238,11 +244,15 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // 使用 $this-><a href="#register">register</a>(服务提供者实例) 方法进行注册。
 
         // 事件 Illuminate\Events\EventServiceProvider@<a href="../Events/EventServiceProvider.html#register">register</a>
-            // 注册 events 单例为 Illuminate\Events\Dispatcher 实例，且设置队列解析器为 Illuminate\Contracts\Queue\Queue
+            // 注册 events 单例为 Illuminate\Events\Dispatcher 实例
+            // 且设置队列解析器为 Illuminate\Contracts\Queue\Queue
         $this-><a href="#register">register</a>(new EventServiceProvider($this));
 
         // 路由 Illuminate\Routing\RoutingServiceProvider@<a href="../Routing/RoutingServiceProvider.html#register">register</a>
-            // 
+            // Illuminate\Routing\Router          注册路由实例
+            // Illuminate\Routing\UrlGenerator    注册 Url 生成器实例
+            // Illuminate\Routing\Redirector      注册 Redirector（跳转）实例
+            // Illuminate\Routing\ResponseFactory 注册 Response（响应）实例
         $this-><a href="#register">register</a>(new RoutingServiceProvider($this));
     }
 

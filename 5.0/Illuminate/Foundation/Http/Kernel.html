@@ -145,7 +145,7 @@ class Kernel implements KernelContract {
             $response = $this->renderException($request, $e);
         }
 
-        // 触发 kernel.handled 事件
+        // 触发 kernel.handled 事件，参数 $request, $response
         $this->app['events']->fire('kernel.handled', [$request, $response]);
 
         return $response;
@@ -168,12 +168,17 @@ class Kernel implements KernelContract {
         Facade::<a href="../../Support/Facades/Facade.html#clearResolvedInstance">clearResolvedInstance</a>('request');
 
         // 通过 HTTP 请求引导应用程序
+            // 运行各引导类，调用其 bootstrap 方法，并触发“bootstrapping: Xxx”和“bootstrapped: Xxx”事件
         $this-><a href="#bootstrap">bootstrap</a>();
 
+        // 获取响应实例
+            // 调用 router.before 路由前置过滤器，参数 $request
+            // 若路由前置过滤器没有返回响应实例，则从一个路由调度请求，并取得响应实例
+            // 调用 router.after 路由后置过滤器，参数 $request, $response
         return (new Pipeline($this->app))
-                    ->send($request)
-                    ->through($this->middleware)
-                    ->then($this->dispatchToRouter());
+                    -><a href="../../Pipeline/Pipeline.html#send">send</a>($request)
+                    -><a href="../../Pipeline/Pipeline.html#through">through</a>($this-><a href="#$middleware">middleware</a>)
+                    -><a href="../../Pipeline/Pipeline.html#then">then</a>($this-><a href="#dispatchToRouter">dispatchToRouter</a>());
     }
 
     <hr id="terminate">
@@ -273,6 +278,7 @@ class Kernel implements KernelContract {
     <hr id="dispatchToRouter">
     /**
      * Get the route dispatcher callback.
+     * 获取路由回调。
      *
      * @return \Closure
      */
@@ -282,7 +288,7 @@ class Kernel implements KernelContract {
         {
             $this->app-><a href="../../Container/Container.html#instance">instance</a>('request', $request);
 
-            return $this->router->dispatch($request);
+            return $this->router-><a href="../../Routing/Router.html#dispatch">dispatch</a>($request);
         };
     }
 

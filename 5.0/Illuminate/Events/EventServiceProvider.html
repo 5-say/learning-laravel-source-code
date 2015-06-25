@@ -51,7 +51,8 @@ class EventServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        // 注册 events 单例为 Illuminate\Events\Dispatcher 实例，且设置队列解析器为 Illuminate\Contracts\Queue\Queue
+        // 注册 events 单例为 Illuminate\Events\Dispatcher 实例
+        // 且设置队列解析器为 Illuminate\Contracts\Queue\Queue
         $this->app-><a href="../Container/Container.html#singleton">singleton</a>('events', function($app)
         {
             return (new Dispatcher($app))-><a href="Dispatcher.html#setQueueResolver">setQueueResolver</a>(function() use ($app)

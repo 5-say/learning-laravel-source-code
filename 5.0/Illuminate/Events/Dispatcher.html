@@ -157,7 +157,7 @@ class Dispatcher implements DispatcherContract {
         return isset($this->listeners[$eventName]);
     }
 
-    <hr id="push($event, $payload = array">
+    <hr id="push">
     /**
      * Register an event and payload to be fired later.
      *
@@ -169,7 +169,7 @@ class Dispatcher implements DispatcherContract {
     {
         $this->listen($event.'_pushed', function() use ($event, $payload)
         {
-            $this->fire($event, $payload);
+            $this-><a href="#fire">fire</a>($event, $payload);
         });
     }
 
@@ -204,9 +204,10 @@ class Dispatcher implements DispatcherContract {
         return $subscriber;
     }
 
-    <hr id="until($event, $payload = array">
+    <hr id="until">
     /**
      * Fire an event until the first non-null response is returned.
+     * 触发一个事件直到首个非空响应被返回。
      *
      * @param  string  $event
      * @param  array   $payload
@@ -214,7 +215,7 @@ class Dispatcher implements DispatcherContract {
      */
     public function until($event, $payload = array())
     {
-        return $this->fire($event, $payload, true);
+        return $this-><a href="#fire">fire</a>($event, $payload, true);
     }
 
     <hr id="flush">
@@ -226,7 +227,7 @@ class Dispatcher implements DispatcherContract {
      */
     public function flush($event)
     {
-        $this->fire($event.'_pushed');
+        $this-><a href="#fire">fire</a>($event.'_pushed');
     }
 
     <hr id="firing">
@@ -240,9 +241,10 @@ class Dispatcher implements DispatcherContract {
         return last($this->firing);
     }
 
-    <hr id="fire($event, $payload = array">
+    <hr id="fire">
     /**
      * Fire an event and call the listeners.
+     * 触发一个事件，并调用其事件监听。
      *
      * @param  string|object  $event
      * @param  mixed   $payload

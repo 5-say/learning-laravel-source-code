@@ -63,8 +63,14 @@ $app = require_once __DIR__.'/../<a href="@bootstrap/app.php">bootstrap/app.php<
     // 注册基础绑定
         // 注册 Application 单例
     // 注册所有的基础服务提供者
-        // 事件处理
-        // 路由处理
+        // 事件 Illuminate\Events\EventServiceProvider@register
+            // 注册 events 单例为 Illuminate\Events\Dispatcher 实例
+            // 并设置队列解析器为 Illuminate\Contracts\Queue\Queue
+        // 路由 Illuminate\Routing\RoutingServiceProvider@register
+            // Illuminate\Routing\Router          注册路由实例
+            // Illuminate\Routing\UrlGenerator    注册 Url 生成器实例
+            // Illuminate\Routing\Redirector      注册 Redirector（跳转）实例
+            // Illuminate\Routing\ResponseFactory 注册 Response（响应）实例
     // 注册核心类别名
     // 设置基础路径
 $app = new Illuminate\Foundation\Application(
@@ -101,6 +107,13 @@ return $app;
 $kernel = $app-><a href="Illuminate/Foundation/Application.html#make">make</a>('Illuminate\Contracts\Http\Kernel');
 
 // 处理传入的 HTTP 请求，并获取响应实例
+    // 通过中间件或路由发送给定的请求
+        // 运行各引导类，调用其 bootstrap 方法，并触发“bootstrapping: Xxx”和“bootstrapped: Xxx”事件
+        // 获取响应实例
+            // 调用 router.before 路由前置过滤器，参数 $request
+            // 若路由前置过滤器没有返回响应实例，则从一个路由调度请求，并取得响应实例
+            // 调用 router.after 路由后置过滤器，参数 $request, $response
+    // 触发 kernel.handled 事件，参数 $request, $response
 $response = $kernel-><a href="Illuminate/Foundation/Http/Kernel.html#handle">handle</a>(
     // 从服务器变量创建一个新的 Illuminate HTTP 请求实例
     $request = Illuminate\Http\Request::<a href="Illuminate/Http/Request.html#capture">capture</a>()
