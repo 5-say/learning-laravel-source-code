@@ -42,6 +42,23 @@ require __DIR__.'/../<a href="@bootstrap/autoload.php">bootstrap/autoload.php</a
 define('LARAVEL_START', <a href="php#microtime">microtime</a>(true));
 
 # 注册 Composer 自动加载程序
+// 在此过程中通过引入 /vendor/composer/autoload_files.php 完成了下列文件的载入
+    // symfony/var-dumper/Symfony/Component/VarDumper/Resources/functions/dump.php
+        // Symfony 提供的 dump 函数。
+    // nikic/php-parser/lib/bootstrap.php
+        // PHP-Parser 是一个用 PHP 编写的 PHP 解析器，目的是简化静态代码分析和操作
+    // swiftmailer/swiftmailer/lib/swift_required.php
+        // 不依赖于 PHP 自带 mail() 函数的 PHP 邮件类
+    // ircmaxell/password-compat/lib/password.php
+        // 用于 PHP 5.5 的简化密码散列 API 兼容库
+    // psy/psysh/src/Psy/functions.php
+        // 命令行调试支持
+    // danielstjules/stringy/src/Create.php
+        // 支持多字节字符串的 PHP 字符串处理库
+    // laravel/framework/src/Illuminate/Foundation/<a href="Illuminate/Foundation/helpers.html">helpers.php</a>
+        // laravel 自带基础函数库
+    // laravel/framework/src/Illuminate/Support/<a href="Illuminate/Support/helpers.html">helpers.php</a>
+        // laravel 自带拓展函数库
 require __DIR__.'/../vendor/autoload.php';
 
 # 加载预编译的类文件
